@@ -1,0 +1,31 @@
+{
+  "dart.lineLength": 110,
+  "editor.rulers": [
+    110
+  ],
+  "dart.doNotFormat": [
+    "**.g.dart",
+    "**.gql.dart",
+    "**.freezed.dart",
+    "**.config.dart",
+    "**.mocks.dart",
+    "**.gen.dart",
+    "**.pb.dart",
+    "**.pbenum.dart",
+    "**.pbjson.dart",
+    "**/generated/**"
+  ],
+  "search.exclude": {
+    "**/.fvm": true,
+    /* "packages": true, */
+    ".dart_tool": true,
+    "coverage": true,
+    "build": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true,
+    ".dart_tool": true,
+    "coverage": true,
+    "build": true
+  },
+}

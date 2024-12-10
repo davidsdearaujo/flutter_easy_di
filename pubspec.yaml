@@ -1,0 +1,22 @@
+name: deivao_modules
+description: "A lightweight and flexible module system for Flutter applications, providing dependency injection and module management capabilities."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.5.4
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_injector: ^2.0.5
+  uuid: ^4.5.1
+  meta: ^1.15.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
