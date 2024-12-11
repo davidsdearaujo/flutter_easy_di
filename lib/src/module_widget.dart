@@ -25,7 +25,9 @@ import 'package:meta/meta.dart';
 /// A widget that provides a module to its children.
 ///
 /// This widget is used to provide a module to its children. The module is created
-/// using the [builder] function and is passed to the children as an [InheritedWidget].
+/// using the [T] module type and is passed to the children as an [InheritedWidget].
+///
+/// You can access the module using the `Module.get<T>()` method.
 class ModuleWidget<T extends Module> extends StatefulWidget {
   /// The child widget that will have access to the module.
   final Widget child;
@@ -41,14 +43,15 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
   @override
   void initState() {
     super.initState();
+    debugPrint('[ModuleWidget] Init $T');
     module = ModulesManager.instance.getModule<T>();
-    debugPrint('[ModuleWidget] Init ${module.runtimeType}');
+    if (module == null) debugPrint('[ModuleWidget] Module of type $T not found');
   }
 
   @override
   void dispose() {
+    debugPrint('[ModuleWidget] Dispose $T');
     ModulesManager.instance.disposeModule<T>();
-    debugPrint('[ModuleWidget] Dispose ${module?.runtimeType}');
     super.dispose();
   }
 
@@ -63,8 +66,6 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
     return widget.child;
   }
 }
-
-typedef ModuleBuilder = Module Function(BuildContext context);
 
 @internal
 class ModuleInheritedWidget extends InheritedNotifier {

@@ -9,6 +9,7 @@ A lightweight and flexible module system for Flutter applications, providing dep
 - 🔄 Module imports to handle dependencies between features
 - 🚀 Easy module initialization and disposal
 - 🎨 Widget integration through ModuleWidget
+- 🧪 Testing utilities with replace and reset capabilities
 
 ## Getting Started
 
@@ -39,28 +40,26 @@ class UserModule extends Module {
 }
 ```
 
-### Initializing Modules
+### Using ModulesManager
 
-Initialize your modules using `ModulesInitializer`:
+Initialize and manage your modules using `ModulesManager`:
 
 ```dart
 void main() async {
-  final initializer = ModulesInitializer();
-  
-  initializer.addModules([
+  ModulesManager.instance.registerModules([
     UserModule(),
     AuthModule(),
   ]);
 
-  await initializer.initAllModules();
+  await ModulesManager.instance.initializeModules();
   
   runApp(const MyApp());
 }
 ```
 
 ### Accessing Dependencies
-1. Wrap the right part of your widget tree with `ModuleWidget` to provide module access;
-2. Use `Module.get<T>()` to access dependencies from within widgets;
+
+Use `ModuleWidget` to provide module access and `Module.get<T>()` to retrieve dependencies:
 
 ```dart
 class UserScreen extends StatelessWidget {
