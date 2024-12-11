@@ -1,6 +1,64 @@
-# Modular DI (Dependency Injection)
+<a name="readme-top"></a>
 
+
+<h1 align="center">Modular DI (Dependency Injection)</h1>
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <!-- You should link the logo to the pub dev page of you project or a homepage otherwise -->
+  <a href="https://github.com/davidsdearaujo/modular_di/">
+    <img src="readme_assets/logo.webp" alt="Logo" width="180">
+  </a>
+
+  <p align="center">
+    A simple way to organize dependency injection in your project using modules.
+    <br />
+    <!-- Put the link for the documentation here -->
+    <a href="https://pub.dev/documentation/modular_di/latest/"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <!-- Disable unused links with with comments -->
+    <!--<a href="https://pub.dev/publishers/deivao.dev/packages">View Demo</a> -->
+    <!-- The Report Bug and Request Feature should point to the issues page of the project, in this example we use the pull requests page because this is a github template -->
+    <a href="https://github.com/davidsdearaujo/modular_di/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/davidsdearaujo/modular_di/issues">Request Feature</a>
+  </p>
+
+<br>
+
+<!--  SHIELDS  ---->
+
+
+<!-- The shields here are an example of what could be used and are the most recommended, there are more below in the "some recomendations about shields" section. 
+See the links in the example below, changing the parts after img.shields.io you can change the content of the shields. Alternatively, go to the website and generate new shields.  
+
+The ones used here are:
+- Release version
+- Pub Points
+- publisher: deivao.dev --->
+
+[![Version](https://img.shields.io/github/v/release/davidsdearaujo/modular_di?style=plastic)](https://pub.dev/packages/modular_di)
+[![Pub Points](https://img.shields.io/pub/points/modular_di?label=pub%20points&style=plastic)](https://pub.dev/packages/modular_di/score)
+
+[![Pub Publisher](https://img.shields.io/pub/publisher/modular_di?style=plastic)](https://pub.dev/publishers/deivao.dev/packages)
+</div>
+
+<!----
+About Shields, some recommendations:
++-+
+Build - GithubWorkflow ou Github Commit checks state
+CodeCoverage - Codecov
+Chat - Discord 
+License - Github
+Rating - Pub Likes, Pub Points and Pub Popularity (if still in early stages, we recommend only Pub Points since it's controllable)
+Social - GitHub Forks, Github Org's Stars (if using Flutterando as the main org), YouTube Channel Subscribers (Again, using Flutterando, as set in the example)
+--->
+
+<br>
 Hey there! 👋 This is a super simple and flexible way to organize your Flutter app into modules, with some cool dependency injection features thrown in.
+
 
 ## Features
 
