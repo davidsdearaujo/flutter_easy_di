@@ -12,7 +12,7 @@
   </a>
 
   <p align="center">
-    A simple way to organize dependency injection in your project using modules.
+    A simple way to organize dependency injection using modules.
     <br />
     <!-- Put the link for the documentation here -->
     <a href="https://pub.dev/documentation/modular_di/latest/"><strong>Explore the docs »</strong></a>
@@ -56,8 +56,10 @@ Rating - Pub Likes, Pub Points and Pub Popularity (if still in early stages, we 
 Social - GitHub Forks, Github Org's Stars (if using Flutterando as the main org), YouTube Channel Subscribers (Again, using Flutterando, as set in the example)
 --->
 
+---
+
 <br>
-Hey there! 👋 This is a super simple and flexible way to organize your Flutter app into modules, with some cool dependency injection features thrown in.
+Hey there! 👋 This is a super simple and flexible way to organize your Flutter app into modules, with a dependency injection features thrown in.
 
 
 ## Features
