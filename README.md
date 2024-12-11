@@ -19,7 +19,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  modular_di: ^0.0.2
+  modular_di: <last version>
 ```
 
 ## Usage
