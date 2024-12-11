@@ -41,37 +41,38 @@ class UserModule extends Module {
 
 ### Initializing Modules
 
-Use `ModulesInitializer` to manage multiple modules:
+Initialize your modules using `ModulesInitializer`:
 
 ```dart
 void main() async {
   final initializer = ModulesInitializer();
   
-  // Add your modules
   initializer.addModules([
     UserModule(),
     AuthModule(),
-    // ... other modules
   ]);
 
-  // Initialize all modules
   await initializer.initAllModules();
   
   runApp(const MyApp());
 }
 ```
 
-### Using ModuleWidget
-
-Wrap your widget tree with `ModuleWidget` to provide module access:
+### Accessing Dependencies
+1. Wrap the right part of your widget tree with `ModuleWidget` to provide module access;
+2. Use `Module.get<T>()` to access dependencies from within widgets;
 
 ```dart
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ModuleWidget(
-      builder: (context) => UserModule(),
-      child: UserContent(),
+    return ModuleWidget<UserModule>(
+      child: Builder(
+        builder: (context) {
+          final userService = Module.get<UserService>(context);
+          return UserContent(service: userService);
+        },
+      ),
     );
   }
 }
@@ -88,7 +89,7 @@ class ProfileModule extends Module {
 
   @override
   FutureOr<void> registerBinds(InjectorRegister i) {
-    i.addSingleton<ProfileService>(() => ProfileServiceImpl());
+    i.addSingleton<ProfileService>(ProfileServiceImpl.new);
   }
 }
 ```
@@ -101,47 +102,10 @@ The package supports different types of dependency injection:
 - **Lazy Singleton**: `addLazySingleton<T>()` - Creates a singleton instance only when first requested
 - **Factory**: `add<T>()` - Creates a new instance each time it's requested
 - **Instance**: `addInstance<T>()` - Registers an existing instance
-- **Replace**: `replace<T>()` - Replaces an existing registration
+- **Replace**: `replace<T>()` - Replaces an existing registration (Useful for testing)
 
-## Example
-
-Here's a complete example showing how to use the module system:
-
-```dart
-// User module
-class UserModule extends Module {
-  @override
-  List<Type> imports = [];
-
-  @override
-  FutureOr<void> registerBinds(InjectorRegister i) {
-    i.addSingleton<UserRepository>(() => UserRepositoryImpl());
-    i.addSingleton<UserService>(() => UserServiceImpl());
-  }
-}
-
-// Profile module depending on User module
-class ProfileModule extends Module {
-  @override
-  List<Type> imports = [UserModule];
-
-  @override
-  FutureOr<void> registerBinds(InjectorRegister i) {
-    i.addSingleton<ProfileService>(() => ProfileServiceImpl());
-  }
-}
-
-// Usage in widget
-class ProfileScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ModuleWidget(
-      builder: (context) => ProfileModule(),
-      child: ProfileContent(),
-    );
-  }
-}
-```
+## Complete Example
+[example](example)
 
 ## Contributing
 

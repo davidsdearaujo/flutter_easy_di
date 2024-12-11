@@ -1,6 +1,8 @@
 import 'package:deivao_modules/deivao_modules.dart';
 
-import 'services/core_service.dart';
+import 'adapters/http_client.dart';
+
+export 'adapters/http_client.dart';
 
 class CoreModule extends Module {
   @override
@@ -8,6 +10,6 @@ class CoreModule extends Module {
 
   @override
   Future<void> registerBinds(InjectorRegister i) async {
-    i.add<CoreService>(CoreService.new);
+    i.addLazySingleton<HttpClient>(HttpClientImpl.cached);
   }
 }

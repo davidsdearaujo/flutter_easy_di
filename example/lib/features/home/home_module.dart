@@ -1,14 +1,11 @@
 import 'package:deivao_modules/deivao_modules.dart';
-import 'package:example/features/core/core_module.dart';
 
-import 'stores/message_store.dart';
+export 'ui/screens/home_screen.dart';
 
 class HomeModule extends Module {
   @override
-  List<Type> imports = [CoreModule];
+  List<Type> imports = [];
 
   @override
-  Future<void> registerBinds(InjectorRegister i) async {
-    i.addLazySingleton<MessageStore>(MessageStore.new);
-  }
+  Future<void> registerBinds(InjectorRegister i) async {}
 }

@@ -1,11 +1,25 @@
+import 'package:deivao_modules/deivao_modules.dart';
 import 'package:flutter/material.dart';
 
-import 'features/home/screens/home_screen.dart';
-import 'injection_container.dart';
+import 'features/core/core_module.dart';
+import 'features/home/home_module.dart';
+import 'features/message/message_module.dart';
+import 'features/message/screens/message_screen.dart';
+import 'features/profile/profile_module.dart';
+
+/// ### All the modules that the app has. <br/>
+/// It's used to initialize the dependencies. <br/><br/>
+final modules = <Module>[
+  CoreModule(),
+  MessageModule(),
+  HomeModule(),
+  ProfileModule(),
+];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await injector.init();
+  ModulesManager.instance.addModules(modules);
+  await ModulesManager.instance.initAllModules();
   runApp(const MyApp());
 }
 
@@ -21,7 +35,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const ModuleWidget<HomeModule>(child: HomeScreen()),
+        '/message': (context) => const ModuleWidget<MessageModule>(child: MessageScreen()),
+        '/profile': (context) => const ModuleWidget<ProfileModule>(child: ProfileScreen()),
+      },
     );
   }
 }

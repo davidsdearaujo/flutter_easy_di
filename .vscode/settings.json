@@ -28,4 +28,13 @@
     "coverage": true,
     "build": true
   },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    ".gitignore": ".gitattributes, .gitmodules, .gitmessage, .mailmap, .git-blame*",
+    "readme.*": "authors, backers.md, changelog*, citation*, code_of_conduct.md, codeowners, contributing.md, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors.md",
+    "*.dart": "${capture}_*.dart,${capture}.*.dart,${capture}.directories.g.dart",
+    "*_bloc.dart": "${capture}_event.dart,${capture}_state.dart",
+    "*_cubit.dart": "${capture}_state.dart"
+  }
 }

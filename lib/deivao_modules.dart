@@ -21,3 +21,5 @@
 library deivao_modules;
 
 export 'src/module.dart';
+export 'src/module_widget.dart' hide ModuleInheritedWidget;
+export 'src/modules_manager.dart';
