@@ -1,4 +1,4 @@
-# Deivao Modules
+# Modular Dependency Injection
 
 A lightweight and flexible module system for Flutter applications, providing dependency injection and module management capabilities.
 
@@ -11,6 +11,7 @@ A lightweight and flexible module system for Flutter applications, providing dep
 - 🎨 Widget integration through ModuleWidget
 - 🧪 Testing utilities with replace and reset capabilities
 - 📊 Fast dependency resolution using directed acyclic graphs
+- 🔌 Router-agnostic - works with any navigation package (Go Router, Auto Route, etc.)
 
 ## Getting Started
 
@@ -18,7 +19,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  deivao_modules: ^0.0.1
+  modular_di: ^0.0.2
 ```
 
 ## Usage

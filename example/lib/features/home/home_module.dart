@@ -1,6 +1,6 @@
 import 'package:modular_di/modular_di.dart';
 
-export 'ui/screens/home_screen.dart';
+export 'screens/home_screen.dart';
 
 class HomeModule extends Module {
   @override
