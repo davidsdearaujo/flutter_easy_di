@@ -8,7 +8,7 @@
 <div align="center">
   <!-- You should link the logo to the pub dev page of you project or a homepage otherwise -->
   <a href="https://github.com/davidsdearaujo/modular_di/">
-    <img src="readme_assets/logo.webp" alt="Logo" width="180">
+    <img src="https://raw.githubusercontent.com/davidsdearaujo/modular_di/main/readme_assets/logo.webp" alt="Logo" width="180">
   </a>
 
   <p align="center">

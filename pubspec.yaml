@@ -1,6 +1,6 @@
 name: modular_di
 description: "A lightweight and flexible module system for Flutter applications, providing dependency injection and module management capabilities."
-version: 0.0.4
+version: 0.0.5
 repository: https://github.com/davidsdearaujo/modular_di
 
 environment:
