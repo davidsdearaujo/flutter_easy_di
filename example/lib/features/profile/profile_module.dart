@@ -18,7 +18,7 @@ class ProfileModule extends Module {
     i.addLazySingleton<ProfileService>(ProfileService.new);
 
     // Domain
-    i.addLazySingleton<ProfileRepository>(ProfileRepositoryImpl.noCache);
+    i.addLazySingleton<ProfileRepository>(ProfileRepositoryImpl.error);
 
     // UI
     i.addLazySingleton<GetProfileCommand>(GetProfileCommand.new);

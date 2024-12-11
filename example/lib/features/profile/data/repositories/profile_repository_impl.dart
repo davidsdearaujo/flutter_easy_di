@@ -6,16 +6,26 @@ import '../services/profile_service.dart';
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileService profileService;
   final bool isCacheEnabled;
+  final bool isErrorEnabled;
 
-  ProfileRepositoryImpl.cached(this.profileService) : isCacheEnabled = true;
-  ProfileRepositoryImpl.noCache(this.profileService) : isCacheEnabled = false;
+  ProfileRepositoryImpl.cached(this.profileService)
+      : isCacheEnabled = true,
+        isErrorEnabled = false;
+  ProfileRepositoryImpl.noCache(this.profileService)
+      : isCacheEnabled = false,
+        isErrorEnabled = false;
+  ProfileRepositoryImpl.error(this.profileService)
+      : isCacheEnabled = true,
+        isErrorEnabled = true;
 
   ProfileModel? _cachedProfile;
 
   @override
   Future<ProfileModel> getProfile() async {
     if (isCacheEnabled && _cachedProfile != null) {
-      throw 'You have already fetched the profile';
+      if (isErrorEnabled) {
+        throw 'You have already fetched the profile';
+      }
       debugPrint('$ProfileRepositoryImpl: returning cached profile');
       return _cachedProfile!;
     }
