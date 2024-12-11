@@ -66,8 +66,12 @@ abstract class Module extends ChangeNotifier {
     if (closestModule.injector == null) {
       throw Exception('$Module ${closestModule.runtimeType} is not initialized');
     }
-    final response = closestModule.injector!.get<T>();
-    return response;
+    try {
+      final response = closestModule.injector!.get<T>();
+      return response;
+    } catch (e) {
+      throw Exception('Type $T not found in module ${closestModule.runtimeType}: $e');
+    }
   }
 
   /// Registers dependencies for this module using the provided [InjectorRegister].
@@ -95,6 +99,7 @@ abstract class Module extends ChangeNotifier {
   ///
   /// Returns the created [CustomAutoInjector] instance.
   Future<CustomAutoInjector> initialize() async {
+    validateImports();
     injector = CustomAutoInjector();
     await registerBinds(injector!);
     return injector!;
@@ -127,6 +132,18 @@ abstract class Module extends ChangeNotifier {
     injector = null;
     await initialize();
     debugPrint('[$Module] Reset $runtimeType');
+  }
+
+  @protected
+  void validateImports() {
+    if (imports.contains(runtimeType)) {
+      throw Exception('Module cannot import itself');
+    }
+
+    final duplicates = imports.toSet().length != imports.length;
+    if (duplicates) {
+      throw Exception('Duplicate imports detected in $runtimeType');
+    }
   }
 }
 
