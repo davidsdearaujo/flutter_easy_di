@@ -1,5 +1,5 @@
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:example/features/core/core_module.dart';
+import 'package:modular_di/modular_di.dart';
 
 import 'data/data.dart';
 import 'domain/domain.dart';

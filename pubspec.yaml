@@ -1,4 +1,4 @@
-name: deivao_modules
+name: modular_di
 description: "A lightweight and flexible module system for Flutter applications, providing dependency injection and module management capabilities."
 version: 0.0.1
 homepage:

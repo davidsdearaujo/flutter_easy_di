@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library deivao_modules;
+library modular_di;
 
 export 'src/module.dart';
 export 'src/module_widget.dart' hide ModuleInheritedWidget;

@@ -1,4 +1,4 @@
-import 'package:deivao_modules/deivao_modules.dart';
+import 'package:modular_di/modular_di.dart';
 
 export 'ui/screens/home_screen.dart';
 

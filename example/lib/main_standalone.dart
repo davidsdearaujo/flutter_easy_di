@@ -1,8 +1,8 @@
 // User module with repository and service
 import 'dart:convert';
 
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:flutter/material.dart';
+import 'package:modular_di/modular_di.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

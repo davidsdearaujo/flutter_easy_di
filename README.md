@@ -6,14 +6,15 @@ A lightweight and flexible module system for Flutter applications, providing dep
 
 - 🎯 Simple module system for organizing application features
 - 💉 Built-in dependency injection using auto_injector
-- 🔄 Module imports to handle dependencies between features
-- 🚀 Easy module initialization and disposal
+- 🔄 Module imports to handle dependencies between features using dependency graphs
+- 🚀 Easy module initialization and disposal with optimized dependency resolution
 - 🎨 Widget integration through ModuleWidget
 - 🧪 Testing utilities with replace and reset capabilities
+- 📊 Fast dependency resolution using directed acyclic graphs
 
 ## Getting Started
 
-Add deivao_modules to your pubspec.yaml:
+Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -112,5 +113,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

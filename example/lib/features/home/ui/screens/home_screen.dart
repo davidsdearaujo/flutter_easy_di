@@ -1,6 +1,6 @@
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:example/features/core/core_module.dart';
 import 'package:flutter/material.dart';
+import 'package:modular_di/modular_di.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

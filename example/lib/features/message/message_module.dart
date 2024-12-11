@@ -1,8 +1,8 @@
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:example/features/core/core_module.dart';
+import 'package:modular_di/modular_di.dart';
 
-import 'commands/load_message_command.dart';
-import 'view_models/message_view_model.dart';
+import 'ui/commands/load_message_command.dart';
+import 'ui/view_models/message_view_model.dart';
 
 class MessageModule extends Module {
   @override

@@ -1,5 +1,5 @@
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:flutter/material.dart';
+import 'package:modular_di/modular_di.dart';
 
 import '../view_models/profile_view_model.dart';
 

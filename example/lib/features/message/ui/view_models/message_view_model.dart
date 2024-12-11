@@ -7,7 +7,7 @@ class MessageViewModel extends ViewModel {
   MessageViewModel(this._loadMessageCommand);
 
   @override
-  List<Command> get commands => [_loadMessageCommand];
+  List<Command> get allCommands => [_loadMessageCommand];
 
   String? _message;
   String? get message => _message;

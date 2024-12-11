@@ -134,10 +134,34 @@ abstract class Module extends ChangeNotifier {
     debugPrint('[$Module] Reset $runtimeType');
   }
 
+  /// Disposes a specific singleton of type [T] from the module.
+  ///
+  /// This method allows you to dispose of a single dependency instead of the entire module.
+  /// It will remove the dependency from the injector and call its dispose method if it's disposable.
+  ///
+  /// Example:
+  /// ```dart
+  /// Module.disposeSingleton<MyService>(context);
+  /// ```
+  static T? disposeSingleton<T extends Object>(BuildContext context) {
+    final closestModule = ModuleInheritedWidget.of(context)?.module;
+    if (closestModule == null) {
+      throw Exception('No $Module found in the widget tree');
+    }
+    if (closestModule.injector == null) {
+      throw Exception('$Module ${closestModule.runtimeType} is not initialized');
+    }
+    try {
+      return closestModule.injector!.disposeSingleton<T>();
+    } catch (e) {
+      throw Exception('Failed to dispose type $T in module ${closestModule.runtimeType}: $e');
+    }
+  }
+
   @protected
   void validateImports() {
     if (imports.contains(runtimeType)) {
-      throw Exception('Module cannot import itself');
+      throw Exception('$Module "$runtimeType" cannot import itself');
     }
 
     final duplicates = imports.toSet().length != imports.length;

@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:deivao_modules/deivao_modules.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_di/modular_di.dart';
 
 /// A widget that provides a module to its children.
 ///

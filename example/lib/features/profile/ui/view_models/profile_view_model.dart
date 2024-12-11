@@ -8,7 +8,7 @@ class ProfileViewModel extends ViewModel {
   ProfileViewModel(this.getProfileCommand);
 
   @override
-  List<Command> get commands => [getProfileCommand];
+  List<Command> get allCommands => [getProfileCommand];
 
   ProfileModel? _profile;
   ProfileModel? get profile => _profile;
