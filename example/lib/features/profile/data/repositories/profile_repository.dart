@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 
-import '../../domain/domain.dart';
+import '../models/profile_model.dart';
 import '../services/profile_service.dart';
+
+abstract class ProfileRepository {
+  Future<ProfileModel> getProfile();
+}
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileService profileService;

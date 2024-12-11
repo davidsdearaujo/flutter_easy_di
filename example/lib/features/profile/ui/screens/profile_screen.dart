@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modular_di/modular_di.dart';
 
-import '../view_models/profile_view_model.dart';
+import '../../data/data.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,13 +11,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ProfileViewModel? _profileViewModel;
-  ProfileViewModel get profileViewModel => _profileViewModel!;
+  Future<ProfileModel>? _profileFuture;
+  late ProfileRepository _profileRepository;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _profileViewModel ??= Module.get<ProfileViewModel>(context);
+    _profileRepository = Module.get<ProfileRepository>(context);
   }
 
   @override
@@ -25,23 +25,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       floatingActionButton: FloatingActionButton(
-        onPressed: profileViewModel.getProfile,
+        onPressed: _loadProfile,
         child: const Icon(Icons.refresh),
       ),
-      body: ListenableBuilder(
-        listenable: profileViewModel,
-        builder: (context, child) {
-          if (profileViewModel.loading) {
+      body: FutureBuilder(
+        future: _profileFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (profileViewModel.errors.isNotEmpty) {
-            return Center(child: Text('Error: ${profileViewModel.errors.join(', ')}'));
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
-          if (profileViewModel.profile == null) {
+          if (snapshot.data == null) {
             return const Center(child: Text('Tap the button to load the profile'));
           }
 
-          final profile = profileViewModel.profile!;
+          final profile = snapshot.data!;
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,5 +58,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
     );
+  }
+
+  void _loadProfile() {
+    setState(() {
+      _profileFuture = _profileRepository.getProfile();
+    });
   }
 }

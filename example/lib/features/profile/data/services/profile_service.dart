@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:example/features/core/core_module.dart';
 
-import '../../domain/domain.dart';
+import '../models/profile_model.dart';
 
 /// Profile service
 class ProfileService {

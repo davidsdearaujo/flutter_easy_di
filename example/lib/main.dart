@@ -4,7 +4,6 @@ import 'package:modular_di/modular_di.dart';
 import 'features/core/core_module.dart';
 import 'features/home/home_module.dart';
 import 'features/message/message_module.dart';
-import 'features/message/ui/screens/message_screen.dart';
 import 'features/profile/profile_module.dart';
 
 /// ### All the modules that the app has. <br/>
