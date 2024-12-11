@@ -1,6 +1,6 @@
 name: modular_di
 description: "A lightweight and flexible module system for Flutter applications, providing dependency injection and module management capabilities."
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/davidsdearaujo/modular_di
 
 environment:
@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  auto_injector: ^2.0.5
-  uuid: ^4.5.1
-  meta: ^1.15.0
+  auto_injector: ">=2.0.5 <=3.0.0"
+  uuid: any
+  meta: any
 
 dev_dependencies:
   flutter_test:
