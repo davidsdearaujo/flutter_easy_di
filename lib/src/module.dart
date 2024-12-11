@@ -47,6 +47,27 @@ import 'module_widget.dart';
 /// }
 /// ```
 abstract class Module extends ChangeNotifier {
+  /// Registers dependencies for this module using the provided [InjectorRegister].
+  ///
+  /// This method should be implemented to define all dependencies that belong to
+  /// this module.
+  @visibleForOverriding
+  FutureOr<void> registerBinds(InjectorRegister i);
+
+  /// The dependency injector for this module.
+  ///
+  /// This is initialized during [initialize] and used to manage the module's
+  /// dependencies.
+  @visibleForTesting
+  CustomAutoInjector? injector;
+
+  /// List of other module types that this module depends on.
+  ///
+  /// These modules will be initialized before this module and their dependencies
+  /// will be available to this module.
+  @mustBeOverridden
+  late List<Type> imports;
+
   /// Gets a dependency of type [T] from the closest [Module] in the widget tree.
   ///
   /// This method searches up the widget tree for a [ModuleInheritedWidget] and
@@ -73,27 +94,6 @@ abstract class Module extends ChangeNotifier {
       throw Exception('Type $T not found in module ${closestModule.runtimeType}: $e');
     }
   }
-
-  /// Registers dependencies for this module using the provided [InjectorRegister].
-  ///
-  /// This method should be implemented to define all dependencies that belong to
-  /// this module.
-  @visibleForOverriding
-  FutureOr<void> registerBinds(InjectorRegister i);
-
-  /// The dependency injector for this module.
-  ///
-  /// This is initialized during [initialize] and used to manage the module's
-  /// dependencies.
-  @visibleForTesting
-  CustomAutoInjector? injector;
-
-  /// List of other module types that this module depends on.
-  ///
-  /// These modules will be initialized before this module and their dependencies
-  /// will be available to this module.
-  @mustBeOverridden
-  late List<Type> imports;
 
   /// Initializes the module by creating an injector and registering dependencies.
   ///
