@@ -64,6 +64,7 @@ Hey there! 👋 This is a super simple and flexible way to organize your Flutter
 
 ## Features
 
+- 🔌 Works with whatever router you love (Go Router, Auto Route, you name it!)
 - 🎯 Keep your app tidy with a simple module system
 - 💉 Easy dependency injection powered by [auto_injector](https://pub.dev/packages/auto_injector)
 - 🔄 Modules can talk to each other through imports
@@ -71,7 +72,6 @@ Hey there! 👋 This is a super simple and flexible way to organize your Flutter
 - 🎨 Drop in the ModuleWidget wherever you need it
 - 🧪 Testing is a breeze with mock replacements
 - 📊 Lightning-fast dependency resolution using directed acyclic graphs
-- 🔌 Works with whatever router you love (Go Router, Auto Route, you name it!)
 
 ## Getting Started
 
