@@ -24,6 +24,7 @@ import 'dart:async';
 import 'package:auto_injector/src/auto_injector_base.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_di/logger.dart';
 import 'package:uuid/uuid.dart';
 
 import 'module_widget.dart';
@@ -66,7 +67,7 @@ abstract class Module extends ChangeNotifier {
   /// These modules will be initialized before this module and their dependencies
   /// will be available to this module.
   @mustBeOverridden
-  late List<Type> imports;
+  List<Type> get imports => [];
 
   /// Gets a dependency of type [T] from the closest [Module] in the widget tree.
   ///
@@ -111,7 +112,7 @@ abstract class Module extends ChangeNotifier {
   @override
   void dispose([void Function(dynamic)? instanceCallback]) {
     injector?.dispose(instanceCallback);
-    debugPrint('$runtimeType disposed!');
+    Logger.log('$runtimeType disposed!');
     super.dispose();
   }
 
@@ -131,7 +132,7 @@ abstract class Module extends ChangeNotifier {
     injector?.dispose(instanceCallback);
     injector = null;
     await initialize();
-    debugPrint('[$Module] Reset $runtimeType');
+    Logger.log('[$Module] Reset $runtimeType');
   }
 
   /// Disposes a specific singleton of type [T] from the module.
@@ -158,6 +159,7 @@ abstract class Module extends ChangeNotifier {
     }
   }
 
+  @visibleForTesting
   @protected
   void validateImports() {
     if (imports.contains(runtimeType)) {
@@ -168,6 +170,30 @@ abstract class Module extends ChangeNotifier {
     if (duplicates) {
       throw Exception('Duplicate imports detected in $runtimeType');
     }
+  }
+
+  /// Checks if this module imports another module.
+  ///
+  /// Returns true if this module imports the given [module], false otherwise.
+  /// This method checks the internal dependency graph to determine if there is
+  /// a direct import relationship between the modules.
+  ///
+  /// Example:
+  /// ```dart
+  /// final coreModule = CoreModule();
+  /// final userModule = UserModule();
+  ///
+  /// // Assuming UserModule imports CoreModule
+  /// print(userModule.importsModule(coreModule)); // true
+  /// print(coreModule.importsModule(userModule)); // false
+  /// ```
+  ///
+  /// Returns false if this module's injector is not initialized.
+  bool importsModule(Module module) {
+    final injector = this.injector;
+    if (injector == null) return false;
+    // ignore: invalid_use_of_visible_for_testing_member
+    return injector.injectorsList.contains(module.injector);
   }
 }
 
@@ -202,8 +228,10 @@ abstract interface class InjectorRegister {
 ///
 /// Uses UUID for unique tag generation to avoid conflicts between injectors.
 class CustomAutoInjector extends AutoInjectorImpl implements InjectorRegister {
+  final String tag;
+
   /// Creates a [CustomAutoInjector] with a specific tag and optional configuration.
-  CustomAutoInjector.tag(String tag, void Function(AutoInjector injector)? on) : super(tag, [], on);
+  CustomAutoInjector.tag(this.tag, void Function(AutoInjector injector)? on) : super(tag, [], on);
 
   /// Creates a [CustomAutoInjector] with a random UUID tag.
   factory CustomAutoInjector([void Function(AutoInjector injector)? on]) {

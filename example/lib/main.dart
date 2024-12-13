@@ -17,8 +17,7 @@ final modules = <Module>[
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ModulesManager.instance.addModules(modules);
-  await ModulesManager.instance.initAllModules();
+  await ModulesManager.instance.initModules(modules);
   runApp(const MyApp());
 }
 

@@ -102,18 +102,43 @@ class UserModule extends Module {
 }
 ```
 
+
 ### Using ModulesManager
 
 Initialize and manage your modules using `ModulesManager`:
 
 ```dart
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //Register and initialize modules
+  await ModulesManager.instance.initModules([
+    UserModule(),
+    AuthModule(),
+  ]);
+  
+  runApp(const MyApp());
+}
+```
+
+#### Registering Modules separately
+You can register modules in any order from anywhere, as long as you register them before initializing them.
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Register CoreModule
+  ModulesManager.instance.registerModule(CoreModule());
+
+  // Register User and Auth modules
   ModulesManager.instance.registerModules([
     UserModule(),
     AuthModule(),
   ]);
 
-  await ModulesManager.instance.initializeModules();
+  // Initialize all the registered modules
+  await ModulesManager.instance.initRegisteredModules();
   
   runApp(const MyApp());
 }
@@ -164,6 +189,22 @@ The package supports different types of dependency injection:
 - **Factory**: `add<T>()` - Creates a new instance each time it's requested
 - **Instance**: `addInstance<T>()` - Registers an existing instance
 - **Replace**: `replace<T>()` - Replaces an existing registration (Useful for testing)
+
+## Logging
+
+The package includes a built-in logging system that can be enabled/disabled as needed:
+
+```dart
+import 'package:modular_di/logger.dart';
+
+// Enable logging (disabled by default)
+Logger.enable();
+
+// Disable logging
+Logger.disable();
+```
+
+Logs will only be printed in debug mode, making it safe to leave logging code in production.
 
 ## Want to see it in action?
 Check out our [example](example) to see how it all comes together!

@@ -20,6 +20,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:modular_di/logger.dart';
 import 'package:modular_di/modular_di.dart';
 
 /// A widget that provides a module to its children.
@@ -31,7 +32,13 @@ import 'package:modular_di/modular_di.dart';
 class ModuleWidget<T extends Module> extends StatefulWidget {
   /// The child widget that will have access to the module.
   final Widget child;
-  const ModuleWidget({super.key, required this.child});
+
+  /// Whether the module should be disposed when the widget is disposed.
+  ///
+  /// If true, the module will be disposed when the widget is disposed.
+  /// If false, the module will not be disposed when the widget is disposed.
+  final bool autoDispose;
+  const ModuleWidget({super.key, required this.child, this.autoDispose = true});
 
   @override
   State<ModuleWidget<T>> createState() => _ModuleWidgetState<T>();
@@ -43,15 +50,18 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
   @override
   void initState() {
     super.initState();
-    debugPrint('[ModuleWidget] Init $T');
+    Logger.log('[ModuleWidget] Init $T');
     module = ModulesManager.instance.getModule<T>();
-    if (module == null) debugPrint('[ModuleWidget] Module of type $T not found');
+    if (module == null) Logger.log('[ModuleWidget] Module of type $T not found');
   }
 
   @override
   void dispose() {
-    debugPrint('[ModuleWidget] Dispose $T');
-    ModulesManager.instance.disposeModule<T>();
+    if (widget.autoDispose) {
+      Logger.log('[ModuleWidget] Dispose $T');
+      // do not throw error if module is not found
+      ModulesManager.instance.disposeModule<T>().ignore();
+    }
     super.dispose();
   }
 
@@ -79,6 +89,7 @@ class ModuleInheritedWidget extends InheritedNotifier {
   @override
   bool updateShouldNotify(ModuleInheritedWidget oldWidget) => false;
 
+  @internal
   static ModuleInheritedWidget? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<ModuleInheritedWidget>();
 }

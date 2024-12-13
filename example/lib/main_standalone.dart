@@ -6,11 +6,10 @@ import 'package:modular_di/modular_di.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ModulesManager.instance.addModules([
+  await ModulesManager.instance.initModules([
     CoreModule(),
     ProfileModule(),
   ]);
-  await ModulesManager.instance.initAllModules();
   runApp(const MyApp());
 }
 
