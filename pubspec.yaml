@@ -1,6 +1,6 @@
 name: modular_di
 description: "A simple way to organize dependency injection using modules."
-version: 0.1.0
+version: 0.0.1
 repository: https://github.com/davidsdearaujo/modular_di
 
 environment:
