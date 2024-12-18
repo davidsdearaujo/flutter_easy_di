@@ -1,3 +1,9 @@
+## 0.1.1
+* Added `listen` property to `Module.get()` to enable widgets to rebuild when module dependencies change;
+* Added dependency replacement methods:
+  * `ModulesManager.instance.replace()` - Replaces a dependency across all modules;
+  * `ModulesManager.instance.replaceFromModule()` - Replaces a dependency in a specific module;
+
 ## 0.1.0
 * Changed the logging system to use debugPrint instead of print.
 * Added a Logger class for logging, which can be enabled/disabled.
