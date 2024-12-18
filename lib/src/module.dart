@@ -74,14 +74,35 @@ abstract class Module extends ChangeNotifier {
   /// This method searches up the widget tree for a [ModuleInheritedWidget] and
   /// retrieves the requested dependency from its module's injector.
   ///
+  /// The [listen] parameter determines if the widget should rebuild when the module changes.
+  /// If true, the widget will rebuild when the module notifies its listeners.
+  /// If false, the widget will not rebuild when the module changes (default).
+  ///
   /// Throws an [Exception] if the dependency is not found.
   ///
   /// Example:
   /// ```dart
-  /// final myService = Module.get<MyService>(context);
+  /// // Without listening to changes
+  /// final repository = Module.get<UserRepository>(context);
+  ///
+  /// // With listening to changes - widget will rebuild when module changes
+  /// class _MyWidgetState extends State<MyWidget> {
+  ///   late UserService _userService;
+  ///
+  ///   @override
+  ///   void didChangeDependencies() {
+  ///     super.didChangeDependencies();
+  ///     _userService = Module.get<UserService>(context, listen: true);
+  ///   }
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Text(_userService.username);
+  ///   }
+  /// }
   /// ```
-  static T get<T extends Object>(BuildContext context) {
-    final closestModule = ModuleInheritedWidget.of(context)?.module;
+  static T get<T extends Object>(BuildContext context, {bool listen = false}) {
+    final closestModule = ModuleInheritedWidget.of(context, listen: listen)?.module;
     if (closestModule == null) {
       throw Exception('No $Module found in the widget tree');
     }
@@ -145,7 +166,7 @@ abstract class Module extends ChangeNotifier {
   /// Module.disposeSingleton<MyService>(context);
   /// ```
   static T? disposeSingleton<T extends Object>(BuildContext context) {
-    final closestModule = ModuleInheritedWidget.of(context)?.module;
+    final closestModule = ModuleInheritedWidget.of(context, listen: false)?.module;
     if (closestModule == null) {
       throw Exception('No $Module found in the widget tree');
     }

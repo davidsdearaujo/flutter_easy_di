@@ -155,6 +155,7 @@ class UserScreen extends StatelessWidget {
     return ModuleWidget<UserModule>(
       child: Builder(
         builder: (context) {
+          // Without listening to changes
           final userService = Module.get<UserService>(context);
           return UserContent(service: userService);
         },
@@ -163,6 +164,41 @@ class UserScreen extends StatelessWidget {
   }
 }
 ```
+
+#### Listening to Module Changes
+
+It's recommended to use `listen: true` when getting dependencies, especially if you're working with modules that might be reset or if you're using imported modules. This ensures your widget rebuilds when dependencies are updated:
+
+```dart
+class UserProfileWidget extends StatefulWidget {
+  @override
+  State<UserProfileWidget> createState() => _UserProfileWidgetState();
+}
+
+class _UserProfileWidgetState extends State<UserProfileWidget> {
+  late UserService _userService;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // With listening to changes - widget will rebuild when:
+    // 1. The current module is reset
+    // 2. Any imported module is disposed/reset
+    _userService = Module.get<UserService>(context, listen: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_userService.username);
+  }
+}
+```
+
+For example, if `UserModule` imports `AuthModule`, and you dispose `AuthModule` using:
+```dart
+await ModulesManager.instance.disposeModule<AuthModule>();
+```
+Any widget using `listen: true` with dependencies from `UserModule` will automatically rebuild with the new dependencies.
 
 ### Module Dependencies
 

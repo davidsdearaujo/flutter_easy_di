@@ -20,6 +20,8 @@
 
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
+import 'dart:collection';
+
 import 'package:meta/meta.dart';
 
 import 'module.dart';
@@ -31,12 +33,30 @@ import 'module.dart';
 /// processes module imports to establish dependencies.
 class ModulesManager {
   /// The singleton instance of [ModulesManager].
-  static final instance = ModulesManager();
+  static ModulesManager? _instance;
+
+  /// The singleton instance of [ModulesManager].
+  static ModulesManager get instance => _instance ??= ModulesManager();
+
+  /// Sets the singleton instance of [ModulesManager].
+  ///
+  /// This is used for testing purposes to set a mock instance.
+  @visibleForTesting
+  static set instance(ModulesManager value) => _instance = value;
+
+  /// Resets the singleton instance of [ModulesManager].
+  ///
+  /// This is used for testing purposes to reset the instance.
+  @visibleForTesting
+  static void reset() => _instance = null;
 
   @visibleForTesting
   ModulesManager();
 
   final _modules = <Type, Module>{};
+
+  @visibleForTesting
+  UnmodifiableMapView<Type, Module> get modules => UnmodifiableMapView(_modules);
 
   /// Initializes a list of modules in a single operation.
   ///
@@ -259,6 +279,52 @@ class ModulesManager {
         module.notifyListeners();
       }
     }
+  }
+
+  /// ### Replaces an instance in all modules that have registered it.
+  ///
+  /// This method searches through all registered modules and replaces the instance
+  /// in any module that has registered a dependency of type T. This is useful when
+  /// you don't know which module owns the dependency, but it can be slower than
+  /// [replaceFromModule] since it needs to check all modules.
+  ///
+  /// Example:
+  /// ```dart
+  /// ModulesManager.instance.replace<UserRepository>(mockUserRepository);
+  /// ```
+  @visibleForTesting
+  void replace<T extends Object>(T instance, {String? key}) {
+    for (final module in _modules.values) {
+      if (module.injector!.isAdded<T>()) {
+        module.injector!.replace<T>(instance, key: key);
+      }
+    }
+  }
+
+  /// ### Replaces an instance in a specific module.
+  ///
+  /// This method directly replaces an instance in the specified module's injector.
+  /// It is faster than [replace] since it targets a specific module rather than
+  /// searching through all modules.
+  ///
+  /// Example:
+  /// ```dart
+  /// ModulesManager.instance.replaceFromModule<AuthModule, UserRepository>(
+  ///   mockUserRepository,
+  /// );
+  /// ```
+  ///
+  /// Throws an [Exception] if the specified module is not found.
+  @visibleForTesting
+  void replaceFromModule<TModule extends Module, TInstance extends Object>(
+    TInstance instance, {
+    String? key,
+  }) {
+    final module = _modules[TModule] as TModule?;
+    if (module == null) {
+      throw Exception('No $TModule registered');
+    }
+    module.injector!.replace<TInstance>(instance, key: key);
   }
 
   @visibleForTesting

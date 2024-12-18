@@ -77,9 +77,22 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
   }
 }
 
+/// An [InheritedWidget] that provides access to a [Module] instance in the widget tree.
+///
+/// This widget is used internally by [ModuleWidget] to make a module available to its
+/// descendants. It extends [InheritedNotifier] to support notifying descendants when
+/// the module changes.
+///
+/// The module is stored as both a [notifier] (for change notifications) and as a
+/// separate [module] field for direct access.
 @internal
 class ModuleInheritedWidget extends InheritedNotifier {
+  /// The module instance being provided to descendants.
   final Module module;
+
+  /// Creates a [ModuleInheritedWidget].
+  ///
+  /// The [module] and [child] parameters must not be null.
   const ModuleInheritedWidget({
     super.key,
     required this.module,
@@ -89,7 +102,14 @@ class ModuleInheritedWidget extends InheritedNotifier {
   @override
   bool updateShouldNotify(ModuleInheritedWidget oldWidget) => false;
 
+  /// Finds the nearest [ModuleInheritedWidget] ancestor in the widget tree.
+  ///
+  /// If [listen] is true, the widget will rebuild when the module changes.
+  /// If [listen] is false, the widget will not rebuild when the module changes.
+  ///
+  /// Returns null if no [ModuleInheritedWidget] is found.
   @internal
-  static ModuleInheritedWidget? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ModuleInheritedWidget>();
+  static ModuleInheritedWidget? of(BuildContext context, {required bool listen}) => listen
+      ? context.dependOnInheritedWidgetOfExactType<ModuleInheritedWidget>()
+      : context.getInheritedWidgetOfExactType<ModuleInheritedWidget>();
 }

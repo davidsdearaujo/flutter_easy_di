@@ -24,7 +24,7 @@ void main() {
           home: ModuleWidget<TestModule>(
             child: Builder(
               builder: (context) {
-                final moduleWidget = ModuleInheritedWidget.of(context);
+                final moduleWidget = ModuleInheritedWidget.of(context, listen: true);
                 expect(moduleWidget?.module, isA<TestModule>());
                 return const SizedBox();
               },
@@ -75,7 +75,7 @@ void main() {
           home: ModuleWidget<TestModule>(
             child: Builder(
               builder: (context) {
-                final moduleWidget = ModuleInheritedWidget.of(context);
+                final moduleWidget = ModuleInheritedWidget.of(context, listen: true);
                 expect(moduleWidget, isNull);
                 return const SizedBox();
               },
@@ -83,6 +83,16 @@ void main() {
           ),
         ),
       );
+    });
+    testWidgets('should render child after module is initialized', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: ModuleWidget<TestModule>(
+            child: GetModuleBeforeInitWidget(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
     });
   });
 }
@@ -102,4 +112,21 @@ class TestModule extends Module {
 
   @override
   FutureOr<void> registerBinds(InjectorRegister i) {}
+}
+
+class GetModuleBeforeInitWidget extends StatefulWidget {
+  const GetModuleBeforeInitWidget({super.key});
+
+  @override
+  State<GetModuleBeforeInitWidget> createState() => _GetModuleBeforeInitWidgetState();
+}
+
+class _GetModuleBeforeInitWidgetState extends State<GetModuleBeforeInitWidget> {
+  late final moduleWidget = ModuleInheritedWidget.of(context, listen: false);
+
+  @override
+  Widget build(BuildContext context) {
+    expect(moduleWidget, isNotNull);
+    return const SizedBox();
+  }
 }
