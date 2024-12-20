@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modular_di/logger.dart';
 import 'package:modular_di/modular_di.dart';
 
 import 'features/core/core_module.dart';
@@ -17,6 +18,7 @@ final modules = <Module>[
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Logger.enable();
   await ModulesManager.instance.initModules(modules);
   runApp(const MyApp());
 }

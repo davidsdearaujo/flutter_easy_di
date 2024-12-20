@@ -16,7 +16,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   void didChangeDependencies() {
-    httpClient = Module.get<HttpClient>(context);
+    httpClient = Module.get<HttpClient>(context, listen: true);
     super.didChangeDependencies();
   }
 
@@ -32,13 +32,6 @@ class _MessageScreenState extends State<MessageScreen> {
             heroTag: 'dispose-core-module',
             onPressed: () => ModulesManager.instance.disposeModule<CoreModule>(),
             child: const Icon(Icons.delete_forever),
-          ),
-          const SizedBox(width: 10),
-          FloatingActionButton(
-            tooltip: 'Profile',
-            heroTag: 'profile',
-            onPressed: () => Navigator.of(context).pushNamed('/profile'),
-            child: const Icon(Icons.person_outlined),
           ),
           const SizedBox(width: 10),
           FloatingActionButton(
