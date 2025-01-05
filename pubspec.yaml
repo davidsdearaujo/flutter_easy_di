@@ -1,10 +1,10 @@
 name: modular_di
 description: "A simple way to organize dependency injection using modules."
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/davidsdearaujo/modular_di
 
 environment:
-  sdk: ^3.5.4
+  sdk: ">=3.5.2 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:

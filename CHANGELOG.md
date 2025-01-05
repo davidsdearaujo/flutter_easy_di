@@ -1,3 +1,6 @@
+## 0.1.2
+* Reduced the minimum version of `dart` to 3.5.2;
+
 ## 0.1.1
 * Added `listen` property to `Module.get()` to enable widgets to rebuild when module dependencies change;
 * Added dependency replacement methods:
