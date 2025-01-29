@@ -1,3 +1,6 @@
+## 0.1.3
+* Reduced the minimum version of `dart` to 3.4.0;
+
 ## 0.1.2
 * Reduced the minimum version of `dart` to 3.5.2;
 
