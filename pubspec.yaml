@@ -4,7 +4,7 @@ version: 0.1.2
 repository: https://github.com/davidsdearaujo/modular_di
 
 environment:
-  sdk: ">=3.5.2 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
