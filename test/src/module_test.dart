@@ -13,7 +13,7 @@ void main() {
     });
 
     test('initialize creates injector and registers binds', () async {
-      final injector = await testModule.initialize();
+      final injector = await testModule.init();
       injector.commit();
 
       expect(injector, isNotNull);
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('dispose cleans up injector', () async {
-      await testModule.initialize();
+      await testModule.init();
       testModule.injector!.commit();
       expect(testModule.injector!.committed, isTrue);
 
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('reset reinitializes the module', () async {
-      await testModule.initialize();
+      await testModule.init();
       final firstInjector = testModule.injector;
 
       await testModule.reset();
@@ -51,7 +51,7 @@ void main() {
 
     test('disposeSingleton removes specific instance', () async {
       final module = TestModule();
-      await module.initialize();
+      await module.init();
       module.injector!.commit();
 
       final service = module.injector!.get<DisposableService>();
@@ -75,6 +75,22 @@ void main() {
       ));
 
       expect(find.text('test'), findsOneWidget);
+    });
+    testWidgets('Module.getCurrentLoadModule retrieves module instance from context', (tester) async {
+      await ModulesManager.instance.initModules([TestModule()]);
+      await tester.pumpWidget(MaterialApp(
+        home: ModuleWidget<TestModule>(
+          child: Builder(
+            builder: (context) {
+              final Module? module = Module.getCurrentLoadModule(context);
+              final TestModule testingModule = (module as TestModule);
+              return Text(testingModule.moduleName);
+            },
+          ),
+        ),
+      ));
+
+      expect(find.text('TestModule'), findsOneWidget);
     });
 
     testWidgets('Module.get throws when no module in context', (tester) async {
@@ -100,6 +116,8 @@ void main() {
 
 // Test implementations
 class TestModule extends Module {
+  String get moduleName => "TestModule";
+
   @override
   List<Type> get imports => [];
 

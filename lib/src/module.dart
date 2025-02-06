@@ -57,7 +57,7 @@ abstract class Module extends ChangeNotifier {
 
   /// The dependency injector for this module.
   ///
-  /// This is initialized during [initialize] and used to manage the module's
+  /// This is initialized during [init] and used to manage the module's
   /// dependencies.
   @visibleForTesting
   CustomAutoInjector? injector;
@@ -102,7 +102,7 @@ abstract class Module extends ChangeNotifier {
   /// }
   /// ```
   static T get<T extends Object>(BuildContext context, {bool listen = false}) {
-    final closestModule = ModuleInheritedWidget.of(context, listen: listen)?.module;
+    final closestModule = getCurrentLoadModule(context, listen: listen);
     if (closestModule == null) {
       throw Exception('No $Module found in the widget tree');
     }
@@ -117,10 +117,36 @@ abstract class Module extends ChangeNotifier {
     }
   }
 
+  /// Gets the current [Module] instance from the widget tree.
+  /// 
+  /// This method searches up the widget tree for a [ModuleInheritedWidget] and returns
+  /// its associated module. If no module is found, returns null.
+  ///
+  /// Parameters:
+  /// - [context]: The build context used to find the module in the widget tree
+  /// - [listen]: Whether to register the calling widget for module updates.
+  ///   If true, the widget will rebuild when the module changes.
+  ///   Defaults to false.
+  ///
+  /// Returns:
+  /// - The closest [Module] instance in the widget tree, or null if none is found.
+  ///
+  /// Example:
+  /// ```dart
+  /// final currentModule = Module.getCurrentLoadModule(context);
+  /// if (currentModule != null) {
+  ///   // Use the module
+  /// }
+  /// ```
+  static Module? getCurrentLoadModule(BuildContext context, {bool listen = false}) {
+    return ModuleInheritedWidget.of(context, listen: listen)?.module;
+  }
+
   /// Initializes the module by creating an injector and registering dependencies.
   ///
   /// Returns the created [CustomAutoInjector] instance.
-  Future<CustomAutoInjector> initialize() async {
+  Future<CustomAutoInjector> init() async {
+    Logger.log('$runtimeType init!'); 
     validateImports();
     injector = CustomAutoInjector();
     await registerBinds(injector!);
@@ -152,7 +178,7 @@ abstract class Module extends ChangeNotifier {
   Future<void> reset([void Function(dynamic)? instanceCallback]) async {
     injector?.dispose(instanceCallback);
     injector = null;
-    await initialize();
+    await init();
     Logger.log('[$Module] Reset $runtimeType');
   }
 

@@ -140,7 +140,7 @@ class ModulesManager {
   Future<void> initRegisteredModules() async {
     _checkForCircularDependencies();
     await Future.wait(_modules.values.map((module) {
-      return module.initialize();
+      return module.init();
     }));
     _proccessImports();
   }
