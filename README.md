@@ -165,6 +165,29 @@ class UserScreen extends StatelessWidget {
 }
 ```
 
+### Accessing Current Module
+
+Use `ModuleWidget` to provide module access and `Module.getCurrentLoadModule()` to retrieve dependencies:
+
+```dart
+class UserScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ModuleWidget<UserModule>(
+      child: Builder(
+        builder: (context) {
+          // Without listening to changes
+          final userService = Module.get<UserService>(context);
+          final userModule = Module.getCurrentLoadModule(context);
+          final String module = userModule.runtimeType.toString();
+          return UserContent(service: userService);
+        },
+      ),
+    );
+  }
+}
+```
+
 #### Listening to Module Changes
 
 It's recommended to use `listen: true` when getting dependencies, especially if you're working with modules that might be reset or if you're using imported modules. This ensures your widget rebuilds when dependencies are updated:
