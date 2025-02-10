@@ -97,24 +97,43 @@ void main() {
       expect(module, equals(testModule));
     });
 
-    testWidgets('Module.get throws when no module in context', (tester) async {
+
+    testWidgets('Module.of retrieves module instance from context', (tester) async {
+      final testModule = TestModule();
+      await ModulesManager.instance.initModules([testModule]);
+      await tester.pumpWidget(
+        ModuleWidget<TestModule>(
+          child: Builder(
+            builder: (context) {
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      final context = tester.element(find.byType(SizedBox));
+      final module = Module.of(context);
+      expect(module, equals(testModule));
+    });
+
+
+
+    testWidgets('Module.of retrieves module instance from context and get parameter module', (tester) async {
+      await ModulesManager.instance.initModules([testModule]);
       await tester.pumpWidget(MaterialApp(
-        home: Builder(
-          builder: (context) {
-            String text = '';
-            try {
-              Module.get<String>(context);
-              text = 'Should not reach here';
-            } catch (e) {
-              text = 'Error thrown';
-            }
-            return Text(text);
-          },
+        home: ModuleWidget<TestModule>(
+          child: Builder(
+            builder: (context) {
+              final Module? module = Module.of(context);
+              final TestModule testingModule = (module as TestModule);
+              return Text(testingModule.moduleName);
+            },
+          ),
         ),
       ));
 
-      expect(find.text('Error thrown'), findsOneWidget);
+      expect(find.text('TestModule'), findsOneWidget);
     });
+
   });
 }
 
