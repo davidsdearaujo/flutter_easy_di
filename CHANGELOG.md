@@ -1,4 +1,4 @@
-## 0.1.4
+## 0.2.0
 * Change initialize() for init() in `Module`;
 * Create and export `Module.of()` to get the current module;
 

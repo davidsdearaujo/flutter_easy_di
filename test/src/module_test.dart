@@ -117,7 +117,7 @@ void main() {
 
 
 
-    testWidgets('Module.of retrieves module instance from context and get parameter module', (tester) async {
+    testWidgets('Module.of - use a parameter from the module', (tester) async {
       await ModulesManager.instance.initModules([testModule]);
       await tester.pumpWidget(MaterialApp(
         home: ModuleWidget<TestModule>(
