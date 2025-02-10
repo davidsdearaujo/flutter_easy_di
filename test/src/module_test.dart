@@ -76,13 +76,13 @@ void main() {
 
       expect(find.text('test'), findsOneWidget);
     });
-    testWidgets('Module.getCurrentLoadModule retrieves module instance from context', (tester) async {
+    testWidgets('Module.of retrieves module instance from context', (tester) async {
       await ModulesManager.instance.initModules([TestModule()]);
       await tester.pumpWidget(MaterialApp(
         home: ModuleWidget<TestModule>(
           child: Builder(
             builder: (context) {
-              final Module? module = Module.getCurrentLoadModule(context);
+              final Module? module = Module.of(context);
               final TestModule testingModule = (module as TestModule);
               return Text(testingModule.moduleName);
             },

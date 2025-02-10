@@ -167,7 +167,7 @@ class UserScreen extends StatelessWidget {
 
 ### Accessing Current Module
 
-Use `ModuleWidget` to provide module access and `Module.getCurrentLoadModule()` to retrieve dependencies:
+Use `ModuleWidget` to provide module access and `Module.of()` to retrieve dependencies:
 
 ```dart
 class UserScreen extends StatelessWidget {
@@ -178,7 +178,7 @@ class UserScreen extends StatelessWidget {
         builder: (context) {
           // Without listening to changes
           final userService = Module.get<UserService>(context);
-          final userModule = Module.getCurrentLoadModule(context);
+          final userModule = Module.of(context);
           final String module = userModule.runtimeType.toString();
           return UserContent(service: userService);
         },

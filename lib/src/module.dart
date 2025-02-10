@@ -102,7 +102,7 @@ abstract class Module extends ChangeNotifier {
   /// }
   /// ```
   static T get<T extends Object>(BuildContext context, {bool listen = false}) {
-    final closestModule = getCurrentLoadModule(context, listen: listen);
+    final closestModule = of(context, listen: listen);
     if (closestModule == null) {
       throw Exception('No $Module found in the widget tree');
     }
@@ -133,12 +133,12 @@ abstract class Module extends ChangeNotifier {
   ///
   /// Example:
   /// ```dart
-  /// final currentModule = Module.getCurrentLoadModule(context);
+  /// final currentModule = Module.of(context);
   /// if (currentModule != null) {
   ///   // Use the module
   /// }
   /// ```
-  static Module? getCurrentLoadModule(BuildContext context, {bool listen = false}) {
+  static Module? of(BuildContext context, {bool listen = false}) {
     return ModuleInheritedWidget.of(context, listen: listen)?.module;
   }
 
