@@ -77,7 +77,8 @@ void main() {
       expect(find.text('test'), findsOneWidget);
     });
     testWidgets('Module.of retrieves module instance from context', (tester) async {
-      await ModulesManager.instance.initModules([TestModule()]);
+      final testModule = TestModule();
+      await ModulesManager.instance.initModules([testModule]);
       await tester.pumpWidget(MaterialApp(
         home: ModuleWidget<TestModule>(
           child: Builder(
@@ -91,6 +92,9 @@ void main() {
       ));
 
       expect(find.text('TestModule'), findsOneWidget);
+      final context = tester.element(find.byType(SizedBox));
+      final module = Module.of(context);
+      expect(module, equals(testModule));
     });
 
     testWidgets('Module.get throws when no module in context', (tester) async {
