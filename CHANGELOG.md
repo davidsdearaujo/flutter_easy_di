@@ -1,3 +1,7 @@
+## 0.2.0
+* Change initialize() for init() in `Module`;
+* Create and export `Module.of()` to get the current module;
+
 ## 0.1.3
 * Reduced the minimum version of `dart` to 3.4.0;
 
