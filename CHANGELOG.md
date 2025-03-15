@@ -1,3 +1,6 @@
+## 0.3.1
+* Update README.md
+
 ## 0.3.0
 * Changed the name of the package to `flutter_easy_di`;
 * Changed the name of the class `Module` to `EasyModule`;

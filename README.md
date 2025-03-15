@@ -7,7 +7,7 @@
 <br />
 <div align="center">
   <!-- You should link the logo to the pub dev page of you project or a homepage otherwise -->
-  <a href="https://github.com/davidsdearaujo/easy_di/">
+  <a href="https://github.com/davidsdearaujo/flutter_easy_di/">
     <img src="https://raw.githubusercontent.com/davidsdearaujo/easy_di/main/readme_assets/logo.webp" alt="Logo" width="180">
   </a>
 
@@ -15,15 +15,15 @@
     A simple way to organize dependency injection using modules.
     <br />
     <!-- Put the link for the documentation here -->
-    <a href="https://pub.dev/documentation/easy_di/latest/"><strong>Explore the docs »</strong></a>
+    <a href="https://pub.dev/documentation/flutter_easy_di/latest/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <!-- Disable unused links with with comments -->
     <!--<a href="https://pub.dev/publishers/deivao.dev/packages">View Demo</a> -->
     <!-- The Report Bug and Request Feature should point to the issues page of the project, in this example we use the pull requests page because this is a github template -->
-    <a href="https://github.com/davidsdearaujo/easy_di/issues">Report Bug</a>
+    <a href="https://github.com/davidsdearaujo/flutter_easy_di/issues">Report Bug</a>
     ·
-    <a href="https://github.com/davidsdearaujo/easy_di/issues">Request Feature</a>
+    <a href="https://github.com/davidsdearaujo/flutter_easy_di/issues">Request Feature</a>
   </p>
 
 <br>
