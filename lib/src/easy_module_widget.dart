@@ -19,9 +19,15 @@
 // SOFTWARE.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
+import 'package:flutter_easy_di/logger.dart';
 import 'package:meta/meta.dart';
-import 'package:modular_di/logger.dart';
-import 'package:modular_di/modular_di.dart';
+
+/// A mixin that does nothing.
+mixin _DoNothingMixin {}
+
+@Deprecated('Use EasyModuleWidget instead')
+class ModuleWidget<T extends EasyModule> = EasyModuleWidget<T> with _DoNothingMixin;
 
 /// A widget that provides a module to its children.
 ///
@@ -29,7 +35,7 @@ import 'package:modular_di/modular_di.dart';
 /// using the [T] module type and is passed to the children as an [InheritedWidget].
 ///
 /// You can access the module using the `Module.get<T>()` method.
-class ModuleWidget<T extends Module> extends StatefulWidget {
+class EasyModuleWidget<T extends EasyModule> extends StatefulWidget {
   /// The child widget that will have access to the module.
   final Widget child;
 
@@ -38,20 +44,20 @@ class ModuleWidget<T extends Module> extends StatefulWidget {
   /// If true, the module will be disposed when the widget is disposed.
   /// If false, the module will not be disposed when the widget is disposed.
   final bool autoDispose;
-  const ModuleWidget({super.key, required this.child, this.autoDispose = true});
+  const EasyModuleWidget({super.key, required this.child, this.autoDispose = true});
 
   @override
-  State<ModuleWidget<T>> createState() => _ModuleWidgetState<T>();
+  State<EasyModuleWidget<T>> createState() => _EasyModuleWidgetState<T>();
 }
 
-class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
-  Module? module;
+class _EasyModuleWidgetState<T extends EasyModule> extends State<EasyModuleWidget<T>> {
+  EasyModule? module;
 
   @override
   void initState() {
     super.initState();
     Logger.log('[ModuleWidget] Init $T');
-    module = ModulesManager.instance.getModule<T>();
+    module = EasyDI.getModule<T>();
     if (module == null) Logger.log('[ModuleWidget] Module of type $T not found');
   }
 
@@ -60,15 +66,15 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
     if (widget.autoDispose) {
       Logger.log('[ModuleWidget] Dispose $T');
       // do not throw error if module is not found
-      ModulesManager.instance.disposeModule<T>().ignore();
+      EasyDI.disposeModule<T>().ignore();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (module case Module module) {
-      return ModuleInheritedWidget(
+    if (module case EasyModule module) {
+      return EasyModuleInheritedWidget(
         module: module,
         child: widget.child,
       );
@@ -77,39 +83,39 @@ class _ModuleWidgetState<T extends Module> extends State<ModuleWidget<T>> {
   }
 }
 
-/// An [InheritedWidget] that provides access to a [Module] instance in the widget tree.
+/// An [InheritedWidget] that provides access to a [EasyModule] instance in the widget tree.
 ///
-/// This widget is used internally by [ModuleWidget] to make a module available to its
+/// This widget is used internally by [EasyModuleWidget] to make a module available to its
 /// descendants. It extends [InheritedNotifier] to support notifying descendants when
 /// the module changes.
 ///
 /// The module is stored as both a [notifier] (for change notifications) and as a
 /// separate [module] field for direct access.
 @internal
-class ModuleInheritedWidget extends InheritedNotifier {
+class EasyModuleInheritedWidget extends InheritedNotifier {
   /// The module instance being provided to descendants.
-  final Module module;
+  final EasyModule module;
 
-  /// Creates a [ModuleInheritedWidget].
+  /// Creates a [EasyModuleInheritedWidget].
   ///
   /// The [module] and [child] parameters must not be null.
-  const ModuleInheritedWidget({
+  const EasyModuleInheritedWidget({
     super.key,
     required this.module,
     required super.child,
   }) : super(notifier: module);
 
   @override
-  bool updateShouldNotify(ModuleInheritedWidget oldWidget) => false;
+  bool updateShouldNotify(EasyModuleInheritedWidget oldWidget) => false;
 
-  /// Finds the nearest [ModuleInheritedWidget] ancestor in the widget tree.
+  /// Finds the nearest [EasyModuleInheritedWidget] ancestor in the widget tree.
   ///
   /// If [listen] is true, the widget will rebuild when the module changes.
   /// If [listen] is false, the widget will not rebuild when the module changes.
   ///
-  /// Returns null if no [ModuleInheritedWidget] is found.
+  /// Returns null if no [EasyModuleInheritedWidget] is found.
   @internal
-  static ModuleInheritedWidget? of(BuildContext context, {required bool listen}) => listen
-      ? context.dependOnInheritedWidgetOfExactType<ModuleInheritedWidget>()
-      : context.getInheritedWidgetOfExactType<ModuleInheritedWidget>();
+  static EasyModuleInheritedWidget? of(BuildContext context, {required bool listen}) => listen
+      ? context.dependOnInheritedWidgetOfExactType<EasyModuleInheritedWidget>()
+      : context.getInheritedWidgetOfExactType<EasyModuleInheritedWidget>();
 }

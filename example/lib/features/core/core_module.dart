@@ -1,10 +1,10 @@
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 import 'adapters/http_client.dart';
 
 export 'adapters/http_client.dart';
 
-class CoreModule extends Module {
+class CoreModule extends EasyModule {
   @override
   List<Type> imports = [];
 

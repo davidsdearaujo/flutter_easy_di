@@ -1,7 +1,7 @@
-name: modular_di
+name: flutter_easy_di
 description: "A simple way to organize dependency injection using modules."
-version: 0.2.0
-repository: https://github.com/davidsdearaujo/modular_di
+version: 0.3.0
+repository: https://github.com/davidsdearaujo/flutter_easy_di
 
 environment:
   sdk: ">=3.4.0 <4.0.0"

@@ -1,6 +1,6 @@
 import 'package:example/features/core/core_module.dart';
 import 'package:flutter/material.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({super.key});
@@ -16,7 +16,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   void didChangeDependencies() {
-    httpClient = Module.get<HttpClient>(context, listen: true);
+    httpClient = EasyDI.get<HttpClient>(context, listen: true);
     super.didChangeDependencies();
   }
 
@@ -30,7 +30,7 @@ class _MessageScreenState extends State<MessageScreen> {
           FloatingActionButton(
             tooltip: 'Dispose $CoreModule',
             heroTag: 'dispose-core-module',
-            onPressed: () => ModulesManager.instance.disposeModule<CoreModule>(),
+            onPressed: () => EasyDI.disposeModule<CoreModule>(),
             child: const Icon(Icons.delete_forever),
           ),
           const SizedBox(width: 10),

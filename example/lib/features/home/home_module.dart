@@ -1,8 +1,8 @@
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 export 'screens/home_screen.dart';
 
-class HomeModule extends Module {
+class HomeModule extends EasyModule {
   @override
   List<Type> imports = [];
 

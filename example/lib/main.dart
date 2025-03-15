@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:modular_di/logger.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
+import 'package:flutter_easy_di/logger.dart';
 
 import 'features/core/core_module.dart';
 import 'features/home/home_module.dart';
@@ -9,7 +9,7 @@ import 'features/profile/profile_module.dart';
 
 /// ### All the modules that the app has. <br/>
 /// It's used to initialize the dependencies. <br/><br/>
-final modules = <Module>[
+final modules = <EasyModule>[
   CoreModule(),
   MessageModule(),
   HomeModule(),
@@ -19,7 +19,7 @@ final modules = <Module>[
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Logger.enable();
-  await ModulesManager.instance.initModules(modules);
+  await EasyDI.initModules(modules);
   runApp(const MyApp());
 }
 
@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const ModuleWidget<HomeModule>(child: HomeScreen()),
-        '/message': (context) => const ModuleWidget<MessageModule>(child: MessageScreen()),
-        '/profile': (context) => const ModuleWidget<ProfileModule>(child: ProfileScreen()),
+        '/': (context) => const EasyModuleWidget<HomeModule>(child: HomeScreen()),
+        '/message': (context) => const EasyModuleWidget<MessageModule>(child: MessageScreen()),
+        '/profile': (context) => const EasyModuleWidget<ProfileModule>(child: ProfileScreen()),
       },
     );
   }

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_di/flutter_easy_di.dart';
 import 'package:flutter_easy_di/logger.dart';
@@ -7,11 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Logger.disable();
-  group('$Module', () {
+  group('$EasyModule', () {
     late TestModule testModule;
 
     setUp(() {
       testModule = TestModule();
+    });
+
+    tearDown(() {
+      EasyDI.reset();
     });
 
     test('initialize creates injector and registers binds', () async {
@@ -63,13 +65,13 @@ void main() {
       expect(module.injector!.get<DisposableService>(), isNot(equals(service)));
     });
 
-    testWidgets('$Module.get retrieves dependency from context', (tester) async {
-      await ModulesManager.instance.initModules([TestModule()]);
+    testWidgets('$EasyModule.get retrieves dependency from context', (tester) async {
+      await EasyDI.initModules([TestModule()]);
       await tester.pumpWidget(MaterialApp(
-        home: ModuleWidget<TestModule>(
+        home: EasyModuleWidget<TestModule>(
           child: Builder(
             builder: (context) {
-              final value = Module.get<String>(context);
+              final value = EasyDI.get<String>(context);
               return Text(value);
             },
           ),
@@ -78,14 +80,14 @@ void main() {
 
       expect(find.text('test'), findsOneWidget);
     });
-    testWidgets('$Module.of retrieves dependency from context', (tester) async {
+    testWidgets('$EasyModule.of returns data from module', (tester) async {
       final testModule = TestModule();
-      await ModulesManager.instance.initModules([testModule]);
+      await EasyDI.initModules([testModule]);
       await tester.pumpWidget(MaterialApp(
-        home: ModuleWidget<TestModule>(
+        home: EasyModuleWidget<TestModule>(
           child: Builder(
             builder: (context) {
-              final Module? module = Module.of(context);
+              final EasyModule? module = EasyModule.of(context);
               final TestModule testingModule = (module as TestModule);
               return Text(testingModule.moduleName);
             },
@@ -96,11 +98,11 @@ void main() {
       expect(find.text('TestModule'), findsOneWidget);
     });
 
-    testWidgets('$Module.of retrieves module instance from context', (tester) async {
+    testWidgets('$EasyModule.of retrieves module instance from context', (tester) async {
       final testModule = TestModule();
-      await ModulesManager.instance.initModules([testModule]);
+      await EasyDI.initModules([testModule]);
       await tester.pumpWidget(
-        ModuleWidget<TestModule>(
+        EasyModuleWidget<TestModule>(
           child: Builder(
             builder: (context) {
               return const SizedBox.shrink();
@@ -109,17 +111,17 @@ void main() {
         ),
       );
       final context = tester.element(find.byType(SizedBox));
-      final module = Module.of(context);
+      final module = EasyModule.of(context);
       expect(module, equals(testModule));
     });
 
-    testWidgets('$Module.of - use a parameter from the module', (tester) async {
-      await ModulesManager.instance.initModules([testModule]);
+    testWidgets('$EasyModule.of - use a parameter from the module', (tester) async {
+      await EasyDI.initModules([testModule]);
       await tester.pumpWidget(MaterialApp(
-        home: ModuleWidget<TestModule>(
+        home: EasyModuleWidget<TestModule>(
           child: Builder(
             builder: (context) {
-              final Module? module = Module.of(context);
+              final EasyModule? module = EasyModule.of(context);
               final TestModule testingModule = (module as TestModule);
               return Text(testingModule.moduleName);
             },
@@ -133,7 +135,7 @@ void main() {
 }
 
 // Test implementations
-class TestModule extends Module {
+class TestModule extends EasyModule {
   String get moduleName => "TestModule";
 
   @override
@@ -146,7 +148,7 @@ class TestModule extends Module {
   }
 }
 
-class ImportingModule extends Module {
+class ImportingModule extends EasyModule {
   @override
   List<Type> get imports => [TestModule];
 
@@ -156,7 +158,7 @@ class ImportingModule extends Module {
   }
 }
 
-class SelfImportingModule extends Module {
+class SelfImportingModule extends EasyModule {
   @override
   List<Type> get imports => [SelfImportingModule];
 
@@ -164,7 +166,7 @@ class SelfImportingModule extends Module {
   Future<void> registerBinds(InjectorRegister i) async {}
 }
 
-class DuplicateImportsModule extends Module {
+class DuplicateImportsModule extends EasyModule {
   @override
   List<Type> get imports => [TestModule, TestModule];
 

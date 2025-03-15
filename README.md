@@ -1,29 +1,29 @@
 <a name="readme-top"></a>
 
 
-<h1 align="center">Modular DI (Dependency Injection)</h1>
+<h1 align="center">Easy DI (Dependency Injection)</h1>
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <!-- You should link the logo to the pub dev page of you project or a homepage otherwise -->
-  <a href="https://github.com/davidsdearaujo/modular_di/">
-    <img src="https://raw.githubusercontent.com/davidsdearaujo/modular_di/main/readme_assets/logo.webp" alt="Logo" width="180">
+  <a href="https://github.com/davidsdearaujo/easy_di/">
+    <img src="https://raw.githubusercontent.com/davidsdearaujo/easy_di/main/readme_assets/logo.webp" alt="Logo" width="180">
   </a>
 
   <p align="center">
     A simple way to organize dependency injection using modules.
     <br />
     <!-- Put the link for the documentation here -->
-    <a href="https://pub.dev/documentation/modular_di/latest/"><strong>Explore the docs »</strong></a>
+    <a href="https://pub.dev/documentation/easy_di/latest/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <!-- Disable unused links with with comments -->
     <!--<a href="https://pub.dev/publishers/deivao.dev/packages">View Demo</a> -->
     <!-- The Report Bug and Request Feature should point to the issues page of the project, in this example we use the pull requests page because this is a github template -->
-    <a href="https://github.com/davidsdearaujo/modular_di/issues">Report Bug</a>
+    <a href="https://github.com/davidsdearaujo/easy_di/issues">Report Bug</a>
     ·
-    <a href="https://github.com/davidsdearaujo/modular_di/issues">Request Feature</a>
+    <a href="https://github.com/davidsdearaujo/easy_di/issues">Request Feature</a>
   </p>
 
 <br>
@@ -79,17 +79,17 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  modular_di: <last version>
+  flutter_easy_di: <last version>
 ```
 
 ## Usage
 
 ### Creating a Module
 
-Create a module by extending the `Module` class:
+Create a module by extending the `EasyModule` class:
 
 ```dart
-class UserModule extends Module {
+class UserModule extends EasyModule {
   @override
   List<Type> imports = []; // Add other modules to import if needed
 
@@ -103,16 +103,16 @@ class UserModule extends Module {
 ```
 
 
-### Using ModulesManager
+### Initializing Modules
 
-Initialize and manage your modules using `ModulesManager`:
+Initialize and manage your modules using `EasyDI.initModules()`:
 
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Register and initialize modules
-  await ModulesManager.instance.initModules([
+  await EasyDI.initModules([
     UserModule(),
     AuthModule(),
   ]);
@@ -129,16 +129,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Register CoreModule
-  ModulesManager.instance.registerModule(CoreModule());
+  EasyDI.registerModules([CoreModule()]);
 
   // Register User and Auth modules
-  ModulesManager.instance.registerModules([
+  EasyDI.registerModules([
     UserModule(),
     AuthModule(),
   ]);
 
   // Initialize all the registered modules
-  await ModulesManager.instance.initRegisteredModules();
+  await EasyDI.initRegisteredModules();
   
   runApp(const MyApp());
 }
@@ -146,17 +146,18 @@ void main() async {
 
 ### Accessing Dependencies
 
-Use `ModuleWidget` to provide module access and `Module.get<T>()` to retrieve dependencies:
+Use `EasyModuleWidget` to provide module access and `EasyDI.get<T>()` to retrieve dependencies:
 
 ```dart
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ModuleWidget<UserModule>(
-      child: Builder(
+    return EasyModuleWidget<UserModule>(
+      // Use builder to create a new context with the module available. This is not needed if your EasyModuleWidget is not in the same widget as the EasyDI.get<T>()
+      child: Builder( 
         builder: (context) {
           // Without listening to changes
-          final userService = Module.get<UserService>(context);
+          final userService = EasyDI.get<UserService>(context);
           return UserContent(service: userService);
         },
       ),
@@ -167,7 +168,7 @@ class UserScreen extends StatelessWidget {
 
 ### Accessing Current Module
 
-Use `ModuleWidget` to provide module access and `Module.of()` to retrieve dependencies:
+Use `EasyModuleWidget` to provide module access and `EasyModule.of()` to get the current module instance:
 
 ```dart
 class UserScreen extends StatelessWidget {
@@ -207,7 +208,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
     // With listening to changes - widget will rebuild when:
     // 1. The current module is reset
     // 2. Any imported module is disposed/reset
-    _userService = Module.get<UserService>(context, listen: true);
+    _userService = EasyDI.get<UserService>(context, listen: true);
   }
 
   @override
@@ -219,7 +220,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
 
 For example, if `UserModule` imports `AuthModule`, and you dispose `AuthModule` using:
 ```dart
-await ModulesManager.instance.disposeModule<AuthModule>();
+await EasyDI.disposeModule<AuthModule>();
 ```
 Any widget using `listen: true` with dependencies from `UserModule` will automatically rebuild with the new dependencies.
 
@@ -228,7 +229,7 @@ Any widget using `listen: true` with dependencies from `UserModule` will automat
 Modules can depend on other modules using the `imports` property:
 
 ```dart
-class ProfileModule extends Module {
+class ProfileModule extends EasyModule {
   @override
   List<Type> imports = [UserModule]; // Import dependencies from UserModule
 
@@ -254,7 +255,7 @@ The package supports different types of dependency injection:
 The package includes a built-in logging system that can be enabled/disabled as needed:
 
 ```dart
-import 'package:modular_di/logger.dart';
+import 'package:flutter_easy_di/logger.dart';
 
 // Enable logging (disabled by default)
 Logger.enable();

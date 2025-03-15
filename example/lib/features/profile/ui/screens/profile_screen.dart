@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 import '../../data/data.dart';
 
@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _profileRepository = Module.get<ProfileRepository>(context);
+    _profileRepository = EasyDI.get<ProfileRepository>(context);
   }
 
   @override

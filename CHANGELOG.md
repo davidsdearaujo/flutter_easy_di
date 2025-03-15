@@ -1,3 +1,20 @@
+## 0.3.0
+* Changed the name of the package to `flutter_easy_di`;
+* Changed the name of the class `Module` to `EasyModule`;
+* Changed the name of the class `ModuleWidget` to `EasyModuleWidget`;
+
+### Deprecated
+Few methods were deprecated, now all the methods are static and can be accessed directly from the class. Instead of using `ModulesManager.instance`, you should use `EasyDI` directly. Here is how to migrate:
+  * `ModulesManager.instance.registerModule(module)` -> `EasyDI.registerModules([module])`;
+  * `Module.get<T>()` -> `EasyDI.get<T>()` to get a dependency from the current module;
+  * `ModulesManager.instance.disposeModule<T>()` -> `EasyDI.disposeModule<T>()` to dispose a module;
+  * `ModulesManager.instance.replace<T>()` -> `EasyDI.replace<T>()` to replace a dependency;
+  * `ModulesManager.instance.replaceFromModule<TModule, TInstance>()` -> `EasyDI.replaceFromModule<TModule, TInstance>()` to replace a dependency in a specific module;
+  * `ModulesManager.instance.reset()` -> `EasyDI.reset()` to reset all registered modules;
+  * `ModulesManager.instance.registerModules(modules)` -> `EasyDI.registerModules(modules)` to register multiple modules;
+  * `ModulesManager.instance.initModules(modules)` -> `EasyDI.initModules(modules)` to initialize modules;
+  * `ModulesManager.instance.initRegisteredModules()` -> `EasyDI.initRegisteredModules()` to initialize registered modules;
+
 ## 0.2.0
 * Change initialize() for init() in `Module`;
 * Create and export `Module.of()` to get the current module;

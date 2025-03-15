@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  modular_di:
+  flutter_easy_di:
     path: ../
   meta: ^1.12.0
 

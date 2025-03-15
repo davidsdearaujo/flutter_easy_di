@@ -1,6 +1,6 @@
 import 'package:example/features/core/core_module.dart';
 import 'package:flutter/material.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: 'dispose-core-module',
         onPressed: () async {
-          await ModulesManager.instance.disposeModule<CoreModule>();
+          await EasyDI.disposeModule<CoreModule>();
         },
         tooltip: 'Dispose $CoreModule',
         child: const Icon(Icons.delete_forever),

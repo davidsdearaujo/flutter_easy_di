@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -8,22 +6,22 @@ import 'package:flutter_easy_di/src/easy_module_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('$ModuleWidget', () {
+  group('$EasyModuleWidget', () {
     late TestModule testModule;
 
     setUp(() {
       testModule = TestModule();
-      ModulesManager.instance.registerModule(testModule);
+      EasyDI.registerModules([testModule]);
     });
 
     tearDown(() {
-      ModulesManager.instance.dispose();
+      EasyDI.reset();
     });
 
     testWidgets('should provide module to children', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: ModuleWidget<TestModule>(
+          home: EasyModuleWidget<TestModule>(
             child: Builder(
               builder: (context) {
                 final moduleWidget = EasyModuleInheritedWidget.of(context, listen: true);
@@ -39,7 +37,7 @@ void main() {
     testWidgets('should auto-dispose module when widget is disposed', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: ModuleWidget<TestModule>(
+          home: EasyModuleWidget<TestModule>(
             autoDispose: true,
             child: SizedBox(),
           ),
@@ -56,7 +54,7 @@ void main() {
     testWidgets('should not dispose module when autoDispose is false', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: ModuleWidget<TestModule>(
+          home: EasyModuleWidget<TestModule>(
             autoDispose: false,
             child: SizedBox(),
           ),
@@ -71,10 +69,10 @@ void main() {
     });
 
     testWidgets('should render child when module is not found', (tester) async {
-      ModulesManager.instance.dispose(); // Remove all modules
+      EasyDI.reset(); // Remove all modules
       await tester.pumpWidget(
         MaterialApp(
-          home: ModuleWidget<TestModule>(
+          home: EasyModuleWidget<TestModule>(
             child: Builder(
               builder: (context) {
                 final moduleWidget = EasyModuleInheritedWidget.of(context, listen: true);
@@ -89,7 +87,7 @@ void main() {
     testWidgets('should render child after module is initialized', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: ModuleWidget<TestModule>(
+          home: EasyModuleWidget<TestModule>(
             child: GetModuleBeforeInitWidget(),
           ),
         ),
@@ -100,7 +98,7 @@ void main() {
 }
 
 // Test module class
-class TestModule extends Module {
+class TestModule extends EasyModule {
   bool resetted = false;
 
   @override

@@ -23,55 +23,18 @@ import 'dart:async';
 // ignore: implementation_imports
 import 'package:auto_injector/src/auto_injector_base.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
+import 'package:flutter_easy_di/logger.dart';
 import 'package:meta/meta.dart';
-import 'package:modular_di/logger.dart';
 import 'package:uuid/uuid.dart';
 
-import 'module_widget.dart';
+import 'easy_module_widget.dart';
 
-/// A module is a class that contains the dependencies of a feature.
-///
-/// It can be used to register dependencies, imports, and other configurations.
-/// Each module represents a self-contained feature or component of the application.
-///
-/// Example:
-/// ```dart
-/// class MyFeatureModule extends Module {
-///   @override
-///   List<Type> imports = [CoreModule];
-///
-///   @override
-///   Future<void> registerBinds(InjectorRegister i) async {
-///     i.addSingleton<MyService>(() => MyServiceImpl());
-///     i.add<MyRepository>(() => MyRepositoryImpl());
-///   }
-/// }
-/// ```
-abstract class Module extends ChangeNotifier {
-  /// Registers dependencies for this module using the provided [InjectorRegister].
+@Deprecated('Use EasyModule instead')
+abstract class Module extends EasyModule {
+  /// Gets a dependency of type [T] from the closest [EasyModule] in the widget tree.
   ///
-  /// This method should be implemented to define all dependencies that belong to
-  /// this module.
-  @visibleForOverriding
-  FutureOr<void> registerBinds(InjectorRegister i);
-
-  /// The dependency injector for this module.
-  ///
-  /// This is initialized during [init] and used to manage the module's
-  /// dependencies.
-  @visibleForTesting
-  CustomAutoInjector? injector;
-
-  /// List of other module types that this module depends on.
-  ///
-  /// These modules will be initialized before this module and their dependencies
-  /// will be available to this module.
-  @mustBeOverridden
-  List<Type> get imports => [];
-
-  /// Gets a dependency of type [T] from the closest [Module] in the widget tree.
-  ///
-  /// This method searches up the widget tree for a [ModuleInheritedWidget] and
+  /// This method searches up the widget tree for a [EasyModuleInheritedWidget] and
   /// retrieves the requested dependency from its module's injector.
   ///
   /// The [listen] parameter determines if the widget should rebuild when the module changes.
@@ -101,25 +64,13 @@ abstract class Module extends ChangeNotifier {
   ///   }
   /// }
   /// ```
-  static T get<T extends Object>(BuildContext context, {bool listen = false}) {
-    final closestModule = of(context, listen: listen);
-    if (closestModule == null) {
-      throw Exception('No $Module found in the widget tree');
-    }
-    if (closestModule.injector == null) {
-      throw Exception('$Module ${closestModule.runtimeType} is not initialized');
-    }
-    try {
-      final response = closestModule.injector!.get<T>();
-      return response;
-    } catch (e) {
-      throw Exception('Type $T not found in module ${closestModule.runtimeType}: $e');
-    }
-  }
+  @Deprecated('Use EasyDI.get instead')
+  static T get<T extends Object>(BuildContext context, {bool listen = false}) =>
+      EasyDI.get<T>(context, listen: listen);
 
-  /// Gets the current [Module] instance from the widget tree.
-  /// 
-  /// This method searches up the widget tree for a [ModuleInheritedWidget] and returns
+  /// Gets the current [EasyModule] instance from the widget tree.
+  ///
+  /// This method searches up the widget tree for a [EasyModuleInheritedWidget] and returns
   /// its associated module. If no module is found, returns null.
   ///
   /// Parameters:
@@ -129,7 +80,7 @@ abstract class Module extends ChangeNotifier {
   ///   Defaults to false.
   ///
   /// Returns:
-  /// - The closest [Module] instance in the widget tree, or null if none is found.
+  /// - The closest [EasyModule] instance in the widget tree, or null if none is found.
   ///
   /// Example:
   /// ```dart
@@ -138,15 +89,95 @@ abstract class Module extends ChangeNotifier {
   ///   // Use the module
   /// }
   /// ```
+  @Deprecated('Use EasyDI.of instead')
   static Module? of(BuildContext context, {bool listen = false}) {
-    return ModuleInheritedWidget.of(context, listen: listen)?.module;
+    return EasyModuleInheritedWidget.of(context, listen: listen)?.module as Module?;
+  }
+
+  /// Disposes a specific singleton of type [T] from the module.
+  ///
+  /// This method allows you to dispose of a single dependency instead of the entire module.
+  /// It will remove the dependency from the injector and call its dispose method if it's disposable.
+  ///
+  /// Example:
+  /// ```dart
+  /// Module.disposeSingleton<MyService>(context);
+  /// ```
+  @Deprecated('Use EasyModule.disposeSingleton instead')
+  static T? disposeSingleton<T extends Object>(BuildContext context) =>
+      EasyModule.disposeSingleton<T>(context);
+}
+
+/// A module is a class that contains the dependencies of a feature.
+///
+/// It can be used to register dependencies, imports, and other configurations.
+/// Each module represents a self-contained feature or component of the application.
+///
+/// Example:
+/// ```dart
+/// class MyFeatureModule extends Module {
+///   @override
+///   List<Type> imports = [CoreModule];
+///
+///   @override
+///   Future<void> registerBinds(InjectorRegister i) async {
+///     i.addSingleton<MyService>(() => MyServiceImpl());
+///     i.add<MyRepository>(() => MyRepositoryImpl());
+///   }
+/// }
+/// ```
+abstract class EasyModule extends ChangeNotifier {
+  /// Registers dependencies for this module using the provided [InjectorRegister].
+  ///
+  /// This method should be implemented to define all dependencies that belong to
+  /// this module.
+  @visibleForOverriding
+  FutureOr<void> registerBinds(InjectorRegister i);
+
+  /// The dependency injector for this module.
+  ///
+  /// This is initialized during [init] and used to manage the module's
+  /// dependencies.
+  @visibleForTesting
+  CustomAutoInjector? injector;
+
+  /// List of other module types that this module depends on.
+  ///
+  /// These modules will be initialized before this module and their dependencies
+  /// will be available to this module.
+  @mustBeOverridden
+  List<Type> get imports => [];
+
+  /// Gets the current [EasyModule] instance from the widget tree.
+  ///
+  /// This method searches up the widget tree for a [EasyModuleInheritedWidget] and returns
+  /// its associated module. If no module is found, returns null.
+  ///
+  /// Parameters:
+  /// - [context]: The build context used to find the module in the widget tree
+  /// - [listen]: Whether to register the calling widget for module updates.
+  ///   If true, the widget will rebuild when the module changes.
+  ///   Defaults to false.
+  ///
+  /// Returns:
+  /// - The closest [EasyModule] instance in the widget tree, or null if none is found.
+  ///
+  /// Example:
+  /// ```dart
+  /// final currentModule = Module.of(context);
+  /// if (currentModule != null) {
+  ///   // Use the module
+  /// }
+  /// ```
+  static EasyModule? of(BuildContext context, {bool listen = false}) {
+    return EasyModuleInheritedWidget.of(context, listen: listen)?.module;
   }
 
   /// Initializes the module by creating an injector and registering dependencies.
   ///
   /// Returns the created [CustomAutoInjector] instance.
   Future<CustomAutoInjector> init() async {
-    Logger.log('$runtimeType init!'); 
+    Logger.log('$runtimeType init!');
     validateImports();
     injector = CustomAutoInjector();
     await registerBinds(injector!);
@@ -179,7 +210,7 @@ abstract class Module extends ChangeNotifier {
     injector?.dispose(instanceCallback);
     injector = null;
     await init();
-    Logger.log('[$Module] Reset $runtimeType');
+    Logger.log('[$EasyModule] Reset $runtimeType');
   }
 
   /// Disposes a specific singleton of type [T] from the module.
@@ -192,12 +223,12 @@ abstract class Module extends ChangeNotifier {
   /// Module.disposeSingleton<MyService>(context);
   /// ```
   static T? disposeSingleton<T extends Object>(BuildContext context) {
-    final closestModule = ModuleInheritedWidget.of(context, listen: false)?.module;
+    final closestModule = EasyModuleInheritedWidget.of(context, listen: false)?.module;
     if (closestModule == null) {
-      throw Exception('No $Module found in the widget tree');
+      throw Exception('No $EasyModule found in the widget tree');
     }
     if (closestModule.injector == null) {
-      throw Exception('$Module ${closestModule.runtimeType} is not initialized');
+      throw Exception('$EasyModule ${closestModule.runtimeType} is not initialized');
     }
     try {
       return closestModule.injector!.disposeSingleton<T>();
@@ -210,7 +241,7 @@ abstract class Module extends ChangeNotifier {
   @protected
   void validateImports() {
     if (imports.contains(runtimeType)) {
-      throw Exception('$Module "$runtimeType" cannot import itself');
+      throw Exception('$EasyModule "$runtimeType" cannot import itself');
     }
 
     final duplicates = imports.toSet().length != imports.length;
@@ -236,7 +267,7 @@ abstract class Module extends ChangeNotifier {
   /// ```
   ///
   /// Returns false if this module's injector is not initialized.
-  bool importsModule(Module module) {
+  bool importsModule(EasyModule module) {
     final injector = this.injector;
     if (injector == null) return false;
     // ignore: invalid_use_of_visible_for_testing_member

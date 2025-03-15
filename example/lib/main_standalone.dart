@@ -2,11 +2,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ModulesManager.instance.initModules([
+  await EasyDI.initModules([
     CoreModule(),
     ProfileModule(),
   ]);
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/profile',
       routes: {
         '/profile': (context) {
-          return const ModuleWidget<ProfileModule>(
+          return const EasyModuleWidget<ProfileModule>(
             child: ProfileScreen(),
           );
         },
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 /// Core module with http client
-class CoreModule extends Module {
+class CoreModule extends EasyModule {
   @override
   List<Type> imports = [];
 
@@ -57,7 +57,7 @@ class HttpClientImpl implements HttpClient {
 }
 
 // Profile module with repository
-class ProfileModule extends Module {
+class ProfileModule extends EasyModule {
   @override
   List<Type> imports = [CoreModule]; // Import dependencies from CoreModule
 
@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(title: const Text('Profile')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final profileRepository = Module.get<ProfileRepository>(context);
+          final profileRepository = EasyDI.get<ProfileRepository>(context);
           setState(() {
             future = profileRepository //
                 .getProfile()

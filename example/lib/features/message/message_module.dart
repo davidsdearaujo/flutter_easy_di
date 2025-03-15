@@ -1,9 +1,9 @@
 import 'package:example/features/core/core_module.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 export 'screens/message_screen.dart';
 
-class MessageModule extends Module {
+class MessageModule extends EasyModule {
   @override
   List<Type> imports = [CoreModule];
 

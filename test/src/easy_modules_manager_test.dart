@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'dart:async';
 
 import 'package:flutter_easy_di/flutter_easy_di.dart';
@@ -8,44 +6,46 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Logger.disable();
-  group('$ModulesManager', () {
-    late ModulesManager manager;
+  group('$EasyDI', () {
     late MockModuleA moduleA;
     late MockModuleB moduleB;
     late MockModuleC moduleC;
 
     setUp(() {
-      manager = ModulesManager();
       moduleA = MockModuleA();
       moduleB = MockModuleB();
       moduleC = MockModuleC();
     });
 
-    test('registerModule adds a single module', () {
-      manager.registerModule(moduleA);
-      expect(manager.getModule<MockModuleA>(), equals(moduleA));
+    tearDown(() {
+      EasyDI.reset();
+    });
+
+    test('registerModules adds a single module', () {
+      EasyDI.registerModules([moduleA]);
+      expect(EasyDI.getModule<MockModuleA>(), equals(moduleA));
     });
 
     test('registerModules adds multiple modules', () {
-      manager.registerModules([moduleA, moduleB]);
-      expect(manager.getModule<MockModuleA>(), equals(moduleA));
-      expect(manager.getModule<MockModuleB>(), equals(moduleB));
+      EasyDI.registerModules([moduleA, moduleB]);
+      expect(EasyDI.getModule<MockModuleA>(), equals(moduleA));
+      expect(EasyDI.getModule<MockModuleB>(), equals(moduleB));
     });
 
     test('initModules registers and initializes modules', () async {
-      await manager.initModules([moduleA, moduleB]);
+      await EasyDI.initModules([moduleA, moduleB]);
       expect(moduleA.injector, isNotNull);
       expect(moduleB.injector, isNotNull);
     });
 
     test('modules are properly linked through imports', () async {
-      await manager.initModules([moduleA, moduleB]);
+      await EasyDI.initModules([moduleA, moduleB]);
       expect(moduleB.importsModule(moduleA), isTrue);
       expect(moduleA.importsModule(moduleB), isFalse);
     });
 
     test('disposeModule resets module and dependencies', () async {
-      await manager.initModules([moduleA, moduleB, moduleC]);
+      await EasyDI.initModules([moduleA, moduleB, moduleC]);
 
       final moduleAID = moduleA.injector?.tag;
       final moduleBID = moduleB.injector?.tag;
@@ -57,7 +57,7 @@ void main() {
       expect(moduleCID, isNotNull);
 
       // Dispose moduleA
-      await manager.disposeModule<MockModuleA>();
+      await EasyDI.disposeModule<MockModuleA>();
 
       // Verify moduleA and dependent modules were reset
       expect(moduleA.injector!.tag, isNot(moduleAID));
@@ -66,11 +66,11 @@ void main() {
     });
 
     test('getModule throws when module not found', () {
-      expect(manager.getModule<MockModuleA>(), null);
+      expect(EasyDI.getModule<MockModuleA>(), null);
     });
 
     test('disposeModule throws when module not found', () {
-      expect(() => manager.disposeModule<MockModuleA>(), throwsException);
+      expect(() => EasyDI.disposeModule<MockModuleA>(), throwsException);
     });
 
     test('circular dependencies are detected', () async {
@@ -79,13 +79,13 @@ void main() {
       final circularB = CircularB();
 
       // Attempting to initialize should throw
-      expect(() => manager.initModules([circularA, circularB]), throwsException);
+      expect(() => EasyDI.initModules([circularA, circularB]), throwsException);
     });
   });
 }
 
 // Mock modules for testing
-class MockModuleA extends Module {
+class MockModuleA extends EasyModule {
   @override
   List<Type> get imports => [];
 
@@ -93,7 +93,7 @@ class MockModuleA extends Module {
   FutureOr<void> registerBinds(InjectorRegister i) {}
 }
 
-class MockModuleB extends Module {
+class MockModuleB extends EasyModule {
   @override
   List<Type> get imports => [MockModuleA];
 
@@ -101,7 +101,7 @@ class MockModuleB extends Module {
   FutureOr<void> registerBinds(InjectorRegister i) {}
 }
 
-class MockModuleC extends Module {
+class MockModuleC extends EasyModule {
   @override
   List<Type> get imports => [MockModuleB];
 
@@ -109,7 +109,7 @@ class MockModuleC extends Module {
   FutureOr<void> registerBinds(InjectorRegister i) {}
 }
 
-class CircularA extends Module {
+class CircularA extends EasyModule {
   @override
   List<Type> get imports => [CircularB];
 
@@ -117,7 +117,7 @@ class CircularA extends Module {
   FutureOr<void> registerBinds(InjectorRegister i) {}
 }
 
-class CircularB extends Module {
+class CircularB extends EasyModule {
   @override
   List<Type> get imports => [CircularA];
 

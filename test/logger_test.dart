@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter_easy_di/logger.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:modular_di/logger.dart';
 
 void main() {
   group('Logger', () {

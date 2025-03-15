@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library modular_di;
+library easy_di;
 
-export 'src/module.dart';
-export 'src/module_widget.dart' hide ModuleInheritedWidget;
-export 'src/modules_manager.dart';
+export 'src/easy_di.dart';
+export 'src/easy_module.dart';
+export 'src/easy_module_widget.dart' hide EasyModuleInheritedWidget;

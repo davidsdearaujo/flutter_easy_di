@@ -1,12 +1,12 @@
 import 'package:example/features/core/core_module.dart';
-import 'package:modular_di/modular_di.dart';
+import 'package:flutter_easy_di/flutter_easy_di.dart';
 
 import 'data/data.dart';
 
 export 'ui/screens/profile_screen.dart';
 
 // Profile module with repository
-class ProfileModule extends Module {
+class ProfileModule extends EasyModule {
   @override
   List<Type> imports = [CoreModule]; // Import dependencies from CoreModule
 
