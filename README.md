@@ -8,7 +8,7 @@
 <div align="center">
   <!-- You should link the logo to the pub dev page of you project or a homepage otherwise -->
   <a href="https://github.com/davidsdearaujo/flutter_easy_di/">
-    <img src="https://raw.githubusercontent.com/davidsdearaujo/easy_di/main/readme_assets/logo.webp" alt="Logo" width="180">
+    <img src="https://raw.githubusercontent.com/davidsdearaujo/flutter_easy_di/main/readme_assets/logo.webp" alt="Logo" width="180">
   </a>
 
   <p align="center">
@@ -39,10 +39,10 @@ The ones used here are:
 - Pub Points
 - publisher: deivao.dev --->
 
-[![Version](https://img.shields.io/github/v/release/davidsdearaujo/modular_di?style=plastic)](https://pub.dev/packages/modular_di)
-[![Pub Points](https://img.shields.io/pub/points/modular_di?label=pub%20points&style=plastic)](https://pub.dev/packages/modular_di/score)
+[![Version](https://img.shields.io/github/v/release/davidsdearaujo/flutter_easy_di?style=plastic)](https://pub.dev/packages/flutter_easy_di)
+[![Pub Points](https://img.shields.io/pub/points/flutter_easy_di?label=pub%20points&style=plastic)](https://pub.dev/packages/flutter_easy_di/score)
 
-[![Pub Publisher](https://img.shields.io/pub/publisher/modular_di?style=plastic)](https://pub.dev/publishers/deivao.dev/packages)
+[![Pub Publisher](https://img.shields.io/pub/publisher/flutter_easy_di?style=plastic)](https://pub.dev/publishers/deivao.dev/packages)
 </div>
 
 <!----
@@ -174,14 +174,12 @@ Use `EasyModuleWidget` to provide module access and `EasyModule.of()` to get the
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ModuleWidget<UserModule>(
+    return EasyModuleWidget<UserModule>(
       child: Builder(
         builder: (context) {
-          // Without listening to changes
-          final userService = Module.get<UserService>(context);
-          final userModule = Module.of(context);
-          final String module = userModule.runtimeType.toString();
-          return UserContent(service: userService);
+          final userModule = EasyDI.getModule(context);
+          final String moduleName = userModule.runtimeType.toString();
+          return Text(moduleName);
         },
       ),
     );
