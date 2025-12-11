@@ -1,6 +1,6 @@
 name: flutter_easy_di
 description: "A simple way to organize dependency injection using modules."
-version: 0.3.1
+version: 0.3.2
 repository: https://github.com/davidsdearaujo/flutter_easy_di
 
 environment:
